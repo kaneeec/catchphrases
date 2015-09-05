@@ -1,0 +1,24 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group
+        android:id="@+id/navigation"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/your_collections"
+            android:checked="true"
+            android:title="Your collections" />
+        <item
+            android:id="@+id/manage_collections"
+            android:title="Manage collections" />
+    </group>
+    <group
+        android:id="@+id/commons"
+        android:checkableBehavior="none">
+        <item
+            android:id="@+id/settings"
+            android:checked="true"
+            android:title="Settings" />
+        <item
+            android:id="@+id/about"
+            android:title="About" />
+    </group>
+</menu>

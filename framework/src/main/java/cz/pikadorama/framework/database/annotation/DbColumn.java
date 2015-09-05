@@ -10,6 +10,11 @@ import cz.pikadorama.framework.database.DbDataType;
 
 /**
  * Created by Tomas on 8.8.2015.
+ *
+ * Annotation for database column.
+ * <p/>
+ * NOTE: if you annotate an ID column with autoincrement option, make sure that the data type is
+ * {@link Integer}.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)

@@ -44,6 +44,14 @@ public interface Dao<T> {
      */
     void delete(T obj);
 
+
+    /**
+     * Deletes object from database.
+     *
+     * @param id id of object to delete
+     */
+    void delete(int id);
+
     /**
      * Finds all objects in database.
      *

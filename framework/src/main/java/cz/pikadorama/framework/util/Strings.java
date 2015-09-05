@@ -2,6 +2,8 @@ package cz.pikadorama.framework.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -56,6 +58,10 @@ public class Strings {
     public static List<String> split(String string, String delimiter) {
         if (string == null || delimiter == null) {
             throw new IllegalArgumentException("Strings and delimiter are mandatory.");
+        }
+
+        if (string.isEmpty()) {
+            return Collections.emptyList();
         }
 
         return new ArrayList<>(Arrays.asList(string.split(delimiter)));

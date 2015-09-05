@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -93,6 +94,9 @@ public class DaoManager {
 
         @Override
         public List<T> getByIds(List<Integer> ids) {
+            if (ids == null || ids.isEmpty()) {
+                return Collections.emptyList();
+            }
             try (SQLiteDatabase db = DbHelperStore.getInstance().getReadableDatabase()) {
                 try (Cursor cursor = db.query(tableName, columnNames, BaseColumns._ID + " IN " + Strings.makeSqlPlaceholders(ids.size()), ids.toArray(new String[ids.size()]), null, null, null)) {
                     List<T> list = new ArrayList<>();
@@ -106,24 +110,37 @@ public class DaoManager {
 
         @Override
         public void create(T obj) {
-            try (SQLiteDatabase db = DbHelperStore.getInstance().getWritableDatabase()) {
-                ContentValues values = helper.objectToContentValues(obj);
-                db.insert(tableName, null, values);
+            if (obj != null) {
+                try (SQLiteDatabase db = DbHelperStore.getInstance().getWritableDatabase()) {
+                    ContentValues values = helper.objectToContentValues(obj);
+                    db.insert(tableName, null, values);
+                }
             }
         }
 
         @Override
         public void update(T obj) {
-            try (SQLiteDatabase db = DbHelperStore.getInstance().getReadableDatabase()) {
-                ContentValues values = helper.objectToContentValues(obj);
-                db.update(tableName, values, BaseColumns._ID + " = ?", new String[]{String.valueOf(helper.getId(obj))});
+            if (obj != null) {
+                try (SQLiteDatabase db = DbHelperStore.getInstance().getReadableDatabase()) {
+                    ContentValues values = helper.objectToContentValues(obj);
+                    db.update(tableName, values, BaseColumns._ID + " = ?", new String[]{String.valueOf(helper.getId(obj))});
+                }
             }
         }
 
         @Override
         public void delete(T obj) {
+            if (obj != null) {
+                try (SQLiteDatabase db = DbHelperStore.getInstance().getWritableDatabase()) {
+                    db.delete(tableName, BaseColumns._ID + " = ?", new String[]{String.valueOf(helper.getId(obj))});
+                }
+            }
+        }
+
+        @Override
+        public void delete(int id) {
             try (SQLiteDatabase db = DbHelperStore.getInstance().getWritableDatabase()) {
-                db.delete(tableName, BaseColumns._ID + " = ?", new String[]{String.valueOf(helper.getId(obj))});
+                db.delete(tableName, BaseColumns._ID + " = ?", new String[]{String.valueOf(id)});
             }
         }
 
@@ -142,6 +159,9 @@ public class DaoManager {
 
         @Override
         public List<T> query(String query, String[] columnNames) {
+            if (query == null || query.isEmpty() || columnNames == null | columnNames.length == 0) {
+                return Collections.emptyList();
+            }
             try (SQLiteDatabase db = DbHelperStore.getInstance().getReadableDatabase()) {
                 try (Cursor cursor = db.rawQuery(query, columnNames)) {
                     List<T> list = new ArrayList<>();

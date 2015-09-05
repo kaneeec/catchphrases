@@ -2,6 +2,8 @@ package cz.pikadorama.framework.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,6 +24,9 @@ public class Objects {
      * @return list of output type elements
      */
     public static <I, O> List<O> map(List<I> list, MapFunction<I, O> mapFunction) {
+        if (list == null) {
+            return Collections.emptyList();
+        }
         List<O> result = new ArrayList<>();
         for (I item : list) {
             result.add(mapFunction.map(item));

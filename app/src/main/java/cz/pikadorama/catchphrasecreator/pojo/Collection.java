@@ -18,8 +18,8 @@ import cz.pikadorama.framework.util.map.StringToInteger;
 /**
  * Created by Tomas on 8.8.2015.
  */
-@DbTable(name = "groups", mappingClass = Group.GroupHelper.class)
-public class Group implements BaseColumns {
+@DbTable(name = "collections", mappingClass = Collection.CollectionHelper.class)
+public class Collection implements BaseColumns {
 
     public static final String COLUMN_NAME = "name";
     public static final String COLUMN_RATING = "rating";
@@ -28,7 +28,7 @@ public class Group implements BaseColumns {
     public static final String COLUMN_PHRASE_IDS = "phrase_ids";
 
     @DbColumn(name = _ID, type = DbDataType.INTEGER, properties = "primary key autoincrement")
-    private int id;
+    private Integer id;
 
     @DbColumn(name = COLUMN_NAME, type = DbDataType.TEXT)
     private String name;
@@ -45,7 +45,7 @@ public class Group implements BaseColumns {
     @DbColumn(name = COLUMN_PHRASE_IDS, type = DbDataType.TEXT)
     private List<CatchPhrase> catchPhrases;
 
-    public Group(int id, String name, double rating, int color, State state, List<CatchPhrase> catchPhrases) {
+    public Collection(int id, String name, double rating, int color, State state, List<CatchPhrase> catchPhrases) {
         this.id = id;
         this.name = name;
         this.rating = rating;
@@ -54,7 +54,7 @@ public class Group implements BaseColumns {
         this.catchPhrases = catchPhrases;
     }
 
-    public Group(String name, double rating, int color, State state, List<CatchPhrase> catchPhrases) {
+    public Collection(String name, double rating, int color, State state, List<CatchPhrase> catchPhrases) {
         this.name = name;
         this.rating = rating;
         this.color = color;
@@ -62,7 +62,7 @@ public class Group implements BaseColumns {
         this.catchPhrases = catchPhrases;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -108,7 +108,7 @@ public class Group implements BaseColumns {
 
     @Override
     public String toString() {
-        return "Group{" +
+        return "Collection{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", rating=" + rating +
@@ -118,11 +118,11 @@ public class Group implements BaseColumns {
                 '}';
     }
 
-    public static final class GroupHelper implements DaoQueryHelper<Group> {
+    public static final class CollectionHelper implements DaoQueryHelper<Collection> {
 
         @Override
-        public Group cursorToObject(Cursor cursor) {
-            int id = cursor.getInt(cursor.getColumnIndexOrThrow(_ID));
+        public Collection cursorToObject(Cursor cursor) {
+            Integer id = cursor.getInt(cursor.getColumnIndexOrThrow(_ID));
             String name = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME));
             double rating = cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_RATING));
             State state = State.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_STATE)));
@@ -132,11 +132,11 @@ public class Group implements BaseColumns {
             List<String> ids = Strings.split(stringOfIds);
             List<CatchPhrase> phrases = DaoManager.getDao(CatchPhrase.class).getByIds(Objects.map(ids, new StringToInteger()));
 
-            return new Group(id, name, rating, color, state, phrases);
+            return new Collection(id, name, rating, color, state, phrases);
         }
 
         @Override
-        public ContentValues objectToContentValues(Group obj) {
+        public ContentValues objectToContentValues(Collection obj) {
             ContentValues cv = new ContentValues();
             cv.put(_ID, obj.getId());
             cv.put(COLUMN_NAME, obj.getName());
@@ -151,7 +151,7 @@ public class Group implements BaseColumns {
         }
 
         @Override
-        public int getId(Group obj) {
+        public Integer getId(Collection obj) {
             return obj.getId();
         }
 

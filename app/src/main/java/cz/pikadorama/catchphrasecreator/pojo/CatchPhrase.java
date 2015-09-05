@@ -21,7 +21,7 @@ public class CatchPhrase implements BaseColumns {
     private static final String COLUMN_SOUND = "sounddata";
 
     @DbColumn(name = _ID, type = DbDataType.INTEGER, properties = "primary key autoincrement")
-    private int id;
+    private Integer id;
 
     @DbColumn(name = COLUMN_TEXT, type = DbDataType.TEXT)
     private String text;
@@ -40,7 +40,7 @@ public class CatchPhrase implements BaseColumns {
         this.soundData = soundData;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -73,7 +73,7 @@ public class CatchPhrase implements BaseColumns {
 
         @Override
         public CatchPhrase cursorToObject(Cursor cursor) {
-            int id = cursor.getInt(cursor.getColumnIndexOrThrow(_ID));
+            Integer id = cursor.getInt(cursor.getColumnIndexOrThrow(_ID));
             String text = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TEXT));
             byte[] soundData = cursor.getBlob(cursor.getColumnIndexOrThrow(COLUMN_SOUND));
             return new CatchPhrase(id, text, soundData);
@@ -89,7 +89,7 @@ public class CatchPhrase implements BaseColumns {
         }
 
         @Override
-        public int getId(CatchPhrase obj) {
+        public Integer getId(CatchPhrase obj) {
             return obj.getId();
         }
     }

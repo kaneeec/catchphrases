@@ -58,6 +58,7 @@ public class DbUtil {
     public synchronized static void createTables(SQLiteDatabase db, Class<?>... entityClasses) {
         if (initialized) {
             Log.w(Const.TAG, "Tables have already been created. Skipping recreation.");
+            return;
         }
         if (entityClasses == null) {
             throw new IllegalArgumentException("No Entity classes have been specified.");

@@ -1,30 +1,38 @@
 package cz.pikadorama.catchphrasecreator.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.widget.TextView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+
+import java.util.List;
 
 import cz.pikadorama.catchphrasecreator.R;
-import cz.pikadorama.catchphrasecreator.pojo.CatchPhrase;
+import cz.pikadorama.catchphrasecreator.adapter.CollectionsAdapter;
+import cz.pikadorama.catchphrasecreator.pojo.Collection;
 import cz.pikadorama.framework.database.dao.Dao;
 import cz.pikadorama.framework.database.dao.DaoManager;
 
 /**
  * Created by Tomas on 11.8.2015.
  */
-public class MainActivity extends Activity {
+public class MainActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        CatchPhrase phrase = new CatchPhrase("text", null);
-        Dao<CatchPhrase> dao = DaoManager.getDao(CatchPhrase.class);
-        dao.create(phrase);
+        Toolbar toolbar = requireView(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        TextView view = (TextView) findViewById(R.id.text);
-        view.setText(dao.findAll().get(0).getText());
+        Dao<Collection> dao = DaoManager.getDao(Collection.class);
+        List<Collection> collections = dao.findAll();
+
+        RecyclerView view = findView(R.id.collections);
+        view.setHasFixedSize(true);
+        view.setLayoutManager(new LinearLayoutManager(this));
+        view.setAdapter(new CollectionsAdapter(collections));
     }
 
 }

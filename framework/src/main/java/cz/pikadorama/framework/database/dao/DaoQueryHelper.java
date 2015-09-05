@@ -12,6 +12,6 @@ public interface DaoQueryHelper<T> {
 
     ContentValues objectToContentValues(T obj);
 
-    int getId(T obj);
+    Integer getId(T obj);
 
 }
