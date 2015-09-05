@@ -11,6 +11,8 @@ public class Strings {
 
     private static final String DEFAULT_DELIMITER = ",";
 
+    private Strings() {}
+
     /**
      * Join strings with the given delimiter.
      *
@@ -88,6 +90,24 @@ public class Strings {
             sb.append("?");
         }
         return sb.toString();
+    }
+
+    public static String trim(CharSequence sequence) {
+        int start = 0;
+        while (start < sequence.length() && Character.isWhitespace(sequence.charAt(start))) {
+            start++;
+        }
+
+        int end = sequence.length();
+        while (end > start && Character.isWhitespace(sequence.charAt(end - 1))) {
+            end--;
+        }
+
+        return sequence.subSequence(start, end).toString();
+    }
+
+    public static String trim(String string) {
+        return string == null ? null : string.trim();
     }
 
 }

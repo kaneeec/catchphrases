@@ -9,6 +9,8 @@ import java.util.List;
  */
 public class Objects {
 
+    private Objects() {}
+
     /**
      * Perform operation defined by {@link cz.pikadorama.framework.util.Objects.MapFunction}
      * on all elements of the input list.

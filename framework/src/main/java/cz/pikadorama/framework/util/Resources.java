@@ -10,6 +10,8 @@ import java.io.IOException;
  */
 public class Resources {
 
+    private Resources() {}
+
     public static void closeQuietly(Closeable closeable) {
         if (closeable != null) {    
             try {
