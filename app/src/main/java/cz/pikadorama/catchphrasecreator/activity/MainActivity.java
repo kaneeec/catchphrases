@@ -9,6 +9,9 @@ import cz.pikadorama.catchphrasecreator.pojo.CatchPhrase;
 import cz.pikadorama.framework.database.dao.Dao;
 import cz.pikadorama.framework.database.dao.DaoManager;
 
+/**
+ * Created by Tomas on 11.8.2015.
+ */
 public class MainActivity extends Activity {
 
     @Override

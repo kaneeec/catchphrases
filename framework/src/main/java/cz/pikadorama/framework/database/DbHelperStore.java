@@ -16,11 +16,14 @@ public final class DbHelperStore {
     private static SQLiteOpenHelper helper = null;
 
     /**
-     * Register your {@link SQLiteOpenHelper} implementation.
+     * Register your {@link SQLiteOpenHelper} implementation. After the helper is registered, whole database
+     * structure is created and initialized. You can than use {@link cz.pikadorama.framework.database.dao.DaoManager}
+     * to get DAO implementations for desired classes.
      *
      * @param helperToRegister {@link SQLiteOpenHelper} implementation
      * @param entityClasses array of entity classes that you want to be handled automatically by the framework
      *                      (they must be annotated with the {@link DbTable} annotation}
+     * @see cz.pikadorama.framework.database.dao.DaoManager
      */
     public synchronized static final void registerHelper(SQLiteOpenHelper helperToRegister, Class<?> ... entityClasses) {
         if (helper != null) {

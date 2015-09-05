@@ -19,14 +19,7 @@ import cz.pikadorama.framework.util.Objects;
 
 
 /**
- * How to use it:
- * <ul>
- *     <li>first call {@link #initDbUtil(Class[])}</li>
- *     <li>and then initialize the DB by calling {@link #createTables(SQLiteDatabase, Class[])}
- *     (you can call this automatically by instantiating a new SqliteHelper and call it in onCreate method)</li>
- * </ul>
- *
- * It is suggested to call these methods in your own {@link android.app.Application} extension.
+ * Created by Tomas on 11.8.2015.
  */
 public class DbUtil {
 

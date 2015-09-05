@@ -5,6 +5,9 @@ package cz.pikadorama.framework;
  */
 public class Const {
 
+    /**
+     * Tag for the Framework loggers.
+     */
     public static final String TAG = "FWK";
 
 }

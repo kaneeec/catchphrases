@@ -12,6 +12,9 @@ import java.util.Date;
 import android.content.Context;
 import android.text.format.DateUtils;
 
+/**
+ * Created by Tomas on 11.8.2015.
+ */
 public class DateTimeFormatter {
 
 	private final Context context;
