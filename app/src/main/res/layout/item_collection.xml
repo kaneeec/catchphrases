@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/list_item_padding"
+    android:minHeight="56dp">
+
+    <!--<cz.pikadorama.framework.view.IconView-->
+    <!--android:id="@+id/icon"-->
+    <!--android:layout_width="@dimen/list_view_icon"-->
+    <!--android:layout_height="@dimen/list_view_icon"-->
+    <!--android:layout_alignParentLeft="true"-->
+    <!--android:padding="4dp" />-->
+
+    <TextView
+        android:id="@+id/collection_name"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textColor="@color/primary_text"
+        android:textSize="@dimen/text_large" />
+
+</RelativeLayout>

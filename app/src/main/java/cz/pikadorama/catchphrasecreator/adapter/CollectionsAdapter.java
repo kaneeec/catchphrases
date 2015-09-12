@@ -1,9 +1,10 @@
 package cz.pikadorama.catchphrasecreator.adapter;
 
-import android.support.v7.widget.RecyclerView;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.List;
@@ -11,46 +12,28 @@ import java.util.List;
 import cz.pikadorama.catchphrasecreator.R;
 import cz.pikadorama.catchphrasecreator.pojo.Collection;
 import cz.pikadorama.framework.util.Views;
+import cz.pikadorama.framework.view.IconView;
 
 /**
  * Created by Tomas on 5.9.2015.
  */
-public class CollectionsAdapter extends RecyclerView.Adapter<CollectionsAdapter.ViewHolder> {
+public class CollectionsAdapter extends ArrayAdapter<Collection> {
 
-    private final List<Collection> collections;
-
-    public CollectionsAdapter(List<Collection> collections) {
-        this.collections = collections;
+    public CollectionsAdapter(Context context, List<Collection> collections) {
+        super(context, 0, collections);
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int position) {
-        View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_collection_card, viewGroup, false);
-        return new ViewHolder(itemView);
-    }
+    public View getView(int position, View convertView, ViewGroup parent) {
+        View root = LayoutInflater.from(getContext()).inflate(R.layout.item_collection, parent, false);
+        Collection collection = getItem(position);
 
-    @Override
-    public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        Collection collection = collections.get(position);
-        viewHolder.setText(collection.getName());
-    }
+        TextView name = Views.require(root, R.id.collection_name);
+        name.setText(collection.getName());
+//
+//        IconView icon = Views.require(root, R.id.icon);
+//        icon.setText(collection.getName());
 
-    @Override
-    public int getItemCount() {
-        return collections.size();
-    }
-
-    public static final class ViewHolder extends RecyclerView.ViewHolder {
-
-        private TextView textView;
-
-        public ViewHolder(View view) {
-            super(view);
-            this.textView = Views.require(view, R.id.collection_name);
-        }
-
-        public void setText(String text) {
-            this.textView.setText(text);
-        }
+        return root;
     }
 }

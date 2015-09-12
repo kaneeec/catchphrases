@@ -5,6 +5,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -97,8 +100,16 @@ public class DaoManager {
             if (ids == null || ids.isEmpty()) {
                 return Collections.emptyList();
             }
+
+            List<String> stringIds = Lists.transform(ids, new Function<Integer, String>() {
+                @Override
+                public String apply(Integer input) {
+                    return String.valueOf(input);
+                }
+            });
+
             try (SQLiteDatabase db = DbHelperStore.getInstance().getReadableDatabase()) {
-                try (Cursor cursor = db.query(tableName, columnNames, BaseColumns._ID + " IN " + Strings.makeSqlPlaceholders(ids.size()), ids.toArray(new String[ids.size()]), null, null, null)) {
+                try (Cursor cursor = db.query(tableName, columnNames, BaseColumns._ID + " IN " + Strings.makeSqlPlaceholders(stringIds.size()), stringIds.toArray(new String[stringIds.size()]), null, null, null)) {
                     List<T> list = new ArrayList<>();
                     while (cursor.moveToNext()) {
                         list.add(helper.cursorToObject(cursor));

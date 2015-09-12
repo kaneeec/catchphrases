@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="activity_horizontal_margin">8dp</dimen>
     <dimen name="activity_vertical_margin">8dp</dimen>
@@ -6,4 +7,15 @@
 
     <dimen name="text_large">18sp</dimen>
     <dimen name="text_regular">14sp</dimen>
+    <dimen name="list_item_padding">16dp</dimen>
+    <dimen name="list_item_text_left_padding">72dp</dimen>
+    <dimen name="list_view_icon">56sp</dimen>
+
+    <!-- tiles -->
+    <dimen name="tile_width">100dp</dimen>
+    <dimen name="tile_height">100dp</dimen>
+    <dimen name="tile_spacing">5dp</dimen>
+    <dimen name="tile_padding">10dp</dimen>
+    <dimen name="tile_text_size">15dp</dimen>
+    <dimen name="widget_margin">4dp</dimen>
 </resources>

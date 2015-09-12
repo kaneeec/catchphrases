@@ -1,9 +1,17 @@
 package cz.pikadorama.catchphrasecreator.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
 import java.util.List;
 
@@ -18,21 +26,75 @@ import cz.pikadorama.framework.database.dao.DaoManager;
  */
 public class MainActivity extends BaseActivity {
 
+    private CollectionsAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = requireView(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        initToolbar();
+        initListView();
+        initDrawer();
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                DrawerLayout drawer = findView(R.id.drawer);
+                drawer.openDrawer(GravityCompat.START);
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void initDrawer() {
+        final DrawerLayout drawer = findView(R.id.drawer);
+        final NavigationView view = findView(R.id.navigation_view);
+        view.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem item) {
+//                switch (item.getItemId()) {
+//                    case R.id.your_collections:
+//
+//                }
+                Snackbar.make(drawer, item.getTitle(), Snackbar.LENGTH_SHORT).show();
+                item.setChecked(true);
+                drawer.closeDrawers();
+                return true;
+            }
+        });
+    }
+
+    private void initListView() {
         Dao<Collection> dao = DaoManager.getDao(Collection.class);
         List<Collection> collections = dao.findAll();
+        adapter = new CollectionsAdapter(getApplicationContext(), collections);
 
-        RecyclerView view = findView(R.id.collections);
-        view.setHasFixedSize(true);
-        view.setLayoutManager(new LinearLayoutManager(this));
-        view.setAdapter(new CollectionsAdapter(collections));
+        ListView listView = (ListView) findViewById(android.R.id.list);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Collection c = adapter.getItem(position);
+//                Snackbar.make(view, c.getName(), Snackbar.LENGTH_SHORT).show();
+                startActivity(new Intent(getApplicationContext(), CatchphrasesActivity.class));
+            }
+        });
+    }
+
+    private void initToolbar() {
+        Toolbar toolbar = requireView(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
+        DrawerLayout drawer = findView(R.id.drawer);
+        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.app_name, R.string.app_name);
+        drawer.setDrawerListener(drawerToggle);
+        drawerToggle.syncState();
     }
 
 }
