@@ -3,7 +3,6 @@ package cz.pikadorama.catchphrasecreator.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -18,6 +17,9 @@ import java.util.List;
 import cz.pikadorama.catchphrasecreator.R;
 import cz.pikadorama.catchphrasecreator.adapter.CollectionsAdapter;
 import cz.pikadorama.catchphrasecreator.pojo.Collection;
+import cz.pikadorama.catchphrasecreator.util.Bundles;
+import cz.pikadorama.catchphrasecreator.util.Const;
+import cz.pikadorama.framework.bundle.ActivityParams;
 import cz.pikadorama.framework.database.dao.Dao;
 import cz.pikadorama.framework.database.dao.DaoManager;
 
@@ -56,11 +58,20 @@ public class MainActivity extends BaseActivity {
         view.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
-//                switch (item.getItemId()) {
-//                    case R.id.your_collections:
-//
-//                }
-                Snackbar.make(drawer, item.getTitle(), Snackbar.LENGTH_SHORT).show();
+                switch (item.getItemId()) {
+                    case R.id.your_collections:
+                        // no action here
+                        break;
+                    case R.id.manage_collections:
+                        // TODO
+                        break;
+                    case R.id.settings:
+                        // TODO
+                        break;
+                    case R.id.about:
+                        // TODO
+                        break;
+                }
                 item.setChecked(true);
                 drawer.closeDrawers();
                 return true;
@@ -71,16 +82,16 @@ public class MainActivity extends BaseActivity {
     private void initListView() {
         Dao<Collection> dao = DaoManager.getDao(Collection.class);
         List<Collection> collections = dao.findAll();
-        adapter = new CollectionsAdapter(getApplicationContext(), collections);
+        adapter = new CollectionsAdapter(this, collections);
 
         ListView listView = (ListView) findViewById(android.R.id.list);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Collection c = adapter.getItem(position);
-//                Snackbar.make(view, c.getName(), Snackbar.LENGTH_SHORT).show();
-                startActivity(new Intent(getApplicationContext(), CatchphrasesActivity.class));
+                Collection collection = adapter.getItem(position);
+                ActivityParams.store(Const.BundleParam.COLLECTION.name(), collection);
+                startActivity(new Intent(MainActivity.this, CatchphrasesActivity.class));
             }
         });
     }

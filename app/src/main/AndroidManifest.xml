@@ -19,11 +19,10 @@
         </activity>
         <activity
             android:name=".activity.CatchphrasesActivity"
-            android:label="@string/app_name">
-        </activity>
+            android:label="@string/app_name"></activity>
         <activity
             android:name="cz.pikadorama.catchphrasecreator.widget.WidgetConfigActivity"
-            android:label="Configure">
+            android:label="@string/title_activity_configure_widget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>

@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.provider.BaseColumns;
 
+import java.io.Serializable;
 import java.util.List;
 
 import cz.pikadorama.framework.database.DbDataType;
@@ -19,7 +20,7 @@ import cz.pikadorama.framework.util.map.StringToInteger;
  * Created by Tomas on 8.8.2015.
  */
 @DbTable(name = "collections", mappingClass = Collection.CollectionHelper.class)
-public class Collection implements BaseColumns {
+public class Collection implements BaseColumns, Serializable {
 
     public static final String COLUMN_NAME = "name";
     public static final String COLUMN_RATING = "rating";

@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.provider.BaseColumns;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 import cz.pikadorama.framework.database.DbDataType;
@@ -15,7 +16,7 @@ import cz.pikadorama.framework.database.dao.DaoQueryHelper;
  * Created by Tomas on 8.8.2015.
  */
 @DbTable(name = "catchphrases", mappingClass = CatchPhrase.CatchPhraseHelper.class)
-public class CatchPhrase implements BaseColumns {
+public class CatchPhrase implements BaseColumns, Serializable {
 
     private static final String COLUMN_TEXT = "text";
     private static final String COLUMN_SOUND = "sounddata";

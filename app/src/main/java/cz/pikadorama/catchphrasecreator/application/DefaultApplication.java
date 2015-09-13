@@ -25,7 +25,7 @@ public class DefaultApplication extends Application {
         super.onCreate();
 
         // register helper
-        DbHelperStore.registerHelper(new SQLiteOpenHelperImpl(getApplicationContext()), DAO_TYPES);
+        DbHelperStore.registerHelper(new SQLiteOpenHelperImpl(this), DAO_TYPES);
 
         Dao<CatchPhrase> catchPhraseDao = DaoManager.getDao(CatchPhrase.class);
         catchPhraseDao.create(new CatchPhrase("Ahoj !", new byte[] {0x00}));
