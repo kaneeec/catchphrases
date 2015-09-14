@@ -53,6 +53,11 @@ public interface Dao<T> {
     void delete(int id);
 
     /**
+     * Deletes all objetcs of the type from the database. Does not cascade.
+     */
+    void deleteAll();
+
+    /**
      * Finds all objects in database.
      *
      * @return list of all objects or empty list

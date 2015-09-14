@@ -47,11 +47,11 @@ public class Widget extends AppWidgetProvider {
         if (intent.getAction() != null && intent.getAction().equals(ACTION_ITEM_CLICK)) {
             int position = intent.getIntExtra(ACTION_ITEM_PARAM, -1);
 //            if (position >= 0) {
-//                MediaPlayer mp = MediaPlayer.create(context, Sound.values()[position].getSoundId());
-//                mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+//                SoundPlayer mp = SoundPlayer.create(context, Sound.values()[position].getSoundId());
+//                mp.setOnCompletionListener(new SoundPlayer.OnCompletionListener() {
 //
 //                    @Override
-//                    public void onCompletion(MediaPlayer mp) {
+//                    public void onCompletion(SoundPlayer mp) {
 //                        mp.release();
 //                    }
 //                });

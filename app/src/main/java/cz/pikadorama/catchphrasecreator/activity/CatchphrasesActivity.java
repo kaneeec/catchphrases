@@ -18,11 +18,9 @@ import cz.pikadorama.catchphrasecreator.R;
 import cz.pikadorama.catchphrasecreator.adapter.TextAdapter;
 import cz.pikadorama.catchphrasecreator.pojo.CatchPhrase;
 import cz.pikadorama.catchphrasecreator.pojo.Collection;
-import cz.pikadorama.catchphrasecreator.util.Bundles;
-import cz.pikadorama.catchphrasecreator.util.Const;
-import cz.pikadorama.framework.bundle.ActivityParams;
-import cz.pikadorama.framework.database.dao.Dao;
-import cz.pikadorama.framework.database.dao.DaoManager;
+import cz.pikadorama.catchphrasecreator.Const;
+import cz.pikadorama.catchphrasecreator.util.SoundPlayer;
+import cz.pikadorama.framework.util.ActivityParams;
 
 public class CatchphrasesActivity extends BaseActivity {
 
@@ -38,7 +36,7 @@ public class CatchphrasesActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Collection collection = ActivityParams.load(Const.BundleParam.COLLECTION.name());
+        Collection collection = ActivityParams.load(Const.BundleParam.COLLECTION);
         catchPhraseList = collection.getCatchPhrases();
         List<String> catchPhrases = Lists.transform(catchPhraseList, new Function<CatchPhrase, String>() {
             @Override
@@ -52,17 +50,10 @@ public class CatchphrasesActivity extends BaseActivity {
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                CatchPhrase catchPhrase = catchPhraseList.get(position);
+                SoundPlayer.getInstance(CatchphrasesActivity.this).play(catchPhrase.getSoundData());
                 Toast.makeText(CatchphrasesActivity.this, catchPhraseList.get(position).getText(), Toast.LENGTH_SHORT)
                         .show();
-//                MediaPlayer mp = MediaPlayer.create(CatchphrasesActivity.this, null);
-//                mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-//
-//                    @Override
-//                    public void onCompletion(MediaPlayer mp) {
-//                        mp.release();
-//                    }
-//                });
-//                mp.start();
             }
         });
     }

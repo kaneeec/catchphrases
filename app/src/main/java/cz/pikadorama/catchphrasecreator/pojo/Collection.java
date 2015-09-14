@@ -4,6 +4,9 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.provider.BaseColumns;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -12,9 +15,7 @@ import cz.pikadorama.framework.database.annotation.DbColumn;
 import cz.pikadorama.framework.database.annotation.DbTable;
 import cz.pikadorama.framework.database.dao.DaoManager;
 import cz.pikadorama.framework.database.dao.DaoQueryHelper;
-import cz.pikadorama.framework.util.Objects;
 import cz.pikadorama.framework.util.Strings;
-import cz.pikadorama.framework.util.map.StringToInteger;
 
 /**
  * Created by Tomas on 8.8.2015.
@@ -131,7 +132,12 @@ public class Collection implements BaseColumns, Serializable {
 
             String stringOfIds = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PHRASE_IDS));
             List<String> ids = Strings.split(stringOfIds);
-            List<CatchPhrase> phrases = DaoManager.getDao(CatchPhrase.class).getByIds(Objects.map(ids, new StringToInteger()));
+            List<CatchPhrase> phrases = DaoManager.getDao(CatchPhrase.class).getByIds(Lists.transform(ids, new Function<String, Integer>() {
+                @Override
+                public Integer apply(String input) {
+                    return Integer.valueOf(input);
+                }
+            }));
 
             return new Collection(id, name, rating, color, state, phrases);
         }
@@ -145,7 +151,12 @@ public class Collection implements BaseColumns, Serializable {
             cv.put(COLUMN_STATE, obj.getState().name());
             cv.put(COLUMN_COLOR, obj.getColor());
 
-            String ids = Strings.join(Objects.map(obj.getCatchPhrases(), PHRASE_TO_ID), ",");
+            String ids = Strings.join(Lists.transform(obj.getCatchPhrases(), new Function<CatchPhrase, String>() {
+                @Override
+                public String apply(CatchPhrase input) {
+                    return String.valueOf(input.getId());
+                }
+            }), ",");
             cv.put(COLUMN_PHRASE_IDS, ids);
 
             return cv;
@@ -155,12 +166,5 @@ public class Collection implements BaseColumns, Serializable {
         public Integer getId(Collection obj) {
             return obj.getId();
         }
-
-        private static final Objects.MapFunction PHRASE_TO_ID = new Objects.MapFunction<CatchPhrase, String>() {
-            @Override
-            public String map(CatchPhrase item) {
-                return String.valueOf(item.getId());
-            }
-        };
     }
 }

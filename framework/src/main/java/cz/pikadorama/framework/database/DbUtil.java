@@ -4,6 +4,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 import android.util.Log;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,7 +18,6 @@ import cz.pikadorama.framework.database.annotation.DbColumn;
 import cz.pikadorama.framework.database.annotation.DbTable;
 import cz.pikadorama.framework.database.dao.DaoManager;
 import cz.pikadorama.framework.database.dao.DaoQueryHelper;
-import cz.pikadorama.framework.util.Objects;
 
 
 /**
@@ -115,10 +117,10 @@ public class DbUtil {
 
     private static List<String> getColumnNames(Class<?> clazz) {
         List<DbColumn> columns = getDbColumns(clazz);
-        return Objects.map(columns, new Objects.MapFunction<DbColumn, String>() {
+        return Lists.transform(columns, new Function<DbColumn, String>() {
             @Override
-            public String map(DbColumn item) {
-                return item.name();
+            public String apply(DbColumn input) {
+                return input.name();
             }
         });
     }

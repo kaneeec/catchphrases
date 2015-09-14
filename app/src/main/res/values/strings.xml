@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Catchphrases</string>
-    <string name="title_activity_main">Catchphrases</string>
+    <string name="app_name">Hlášky</string>
+    <string name="title_activity_main">Hlášky</string>
 
     <string name="error_no_sound_selected">Musíte vybrat alespoň jednu hlášku!</string>
     <string name="error_cannot_play_sound">Zvuk nelze přehrát</string>
-    <string name="title_activity_configure_widget">Configure widget</string>
+
+    <string name="title_activity_configure_widget">Nastavení widgetu</string>
 </resources>

@@ -17,9 +17,8 @@ import java.util.List;
 import cz.pikadorama.catchphrasecreator.R;
 import cz.pikadorama.catchphrasecreator.adapter.CollectionsAdapter;
 import cz.pikadorama.catchphrasecreator.pojo.Collection;
-import cz.pikadorama.catchphrasecreator.util.Bundles;
-import cz.pikadorama.catchphrasecreator.util.Const;
-import cz.pikadorama.framework.bundle.ActivityParams;
+import cz.pikadorama.catchphrasecreator.Const;
+import cz.pikadorama.framework.util.ActivityParams;
 import cz.pikadorama.framework.database.dao.Dao;
 import cz.pikadorama.framework.database.dao.DaoManager;
 
@@ -90,7 +89,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Collection collection = adapter.getItem(position);
-                ActivityParams.store(Const.BundleParam.COLLECTION.name(), collection);
+                ActivityParams.store(Const.BundleParam.COLLECTION, collection);
                 startActivity(new Intent(MainActivity.this, CatchphrasesActivity.class));
             }
         });

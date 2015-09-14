@@ -156,6 +156,13 @@ public class DaoManager {
         }
 
         @Override
+        public void deleteAll() {
+            try (SQLiteDatabase db = DbHelperStore.getInstance().getWritableDatabase()) {
+                db.execSQL("delete from " + tableName);
+            }
+        }
+
+        @Override
         public List<T> findAll() {
             try (SQLiteDatabase db = DbHelperStore.getInstance().getReadableDatabase()) {
                 try (Cursor cursor = db.query(tableName, columnNames, null, null, null, null, null)) {

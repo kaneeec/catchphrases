@@ -6,7 +6,7 @@ import android.util.Log;
 
 import cz.pikadorama.framework.Const;
 import cz.pikadorama.framework.database.annotation.DbTable;
-import cz.pikadorama.framework.util.Resources;
+import cz.pikadorama.framework.util.Closeables;
 
 /**
  * Created by Tomas on 5.9.2015.
@@ -34,7 +34,7 @@ public final class DbHelperStore {
 
             // create tables when first run
             SQLiteDatabase db = DbHelperStore.getInstance().getReadableDatabase();
-            Resources.closeQuietly(db);
+            Closeables.closeQuietly(db);
         }
     }
 
