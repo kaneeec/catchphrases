@@ -120,13 +120,14 @@ public class DaoManager {
         }
 
         @Override
-        public void create(T obj) {
+        public long create(T obj) {
             if (obj != null) {
                 try (SQLiteDatabase db = DbHelperStore.getInstance().getWritableDatabase()) {
                     ContentValues values = helper.objectToContentValues(obj);
-                    db.insert(tableName, null, values);
+                    return db.insert(tableName, null, values);
                 }
             }
+            return -1;
         }
 
         @Override

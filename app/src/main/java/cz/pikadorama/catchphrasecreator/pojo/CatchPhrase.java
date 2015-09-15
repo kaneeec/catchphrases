@@ -41,6 +41,10 @@ public class CatchPhrase implements BaseColumns, Serializable {
         this.soundData = soundData;
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public Integer getId() {
         return id;
     }

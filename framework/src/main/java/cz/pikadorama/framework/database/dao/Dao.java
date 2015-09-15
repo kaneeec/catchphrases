@@ -27,8 +27,9 @@ public interface Dao<T> {
      * Creates a new object in database.
      *
      * @param obj instance to create
+     * @return ID of the created object, -1 if the creation failed
      */
-    void create(T obj);
+    long create(T obj);
 
     /**
      * Updates old object in database with the same ID with the new values.

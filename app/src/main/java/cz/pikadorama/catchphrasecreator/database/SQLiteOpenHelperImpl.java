@@ -15,8 +15,6 @@ public class SQLiteOpenHelperImpl extends SQLiteOpenHelper {
     private static final int VERSION = 1;
     private static final String NAME = "catchphrases.db";
 
-    private static SQLiteOpenHelperImpl helper;
-
     public SQLiteOpenHelperImpl(Context context) {
         super(context, NAME, null, VERSION);
     }

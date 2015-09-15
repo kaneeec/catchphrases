@@ -6,8 +6,10 @@ import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
+import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 
 import java.io.File;
@@ -17,6 +19,7 @@ import java.util.UUID;
 
 import cz.pikadorama.catchphrasecreator.collection.Config;
 import cz.pikadorama.catchphrasecreator.collection.ConfigManager;
+import cz.pikadorama.catchphrasecreator.collection.Sound;
 import cz.pikadorama.catchphrasecreator.database.SQLiteOpenHelperImpl;
 import cz.pikadorama.catchphrasecreator.pojo.CatchPhrase;
 import cz.pikadorama.catchphrasecreator.pojo.Collection;
@@ -41,7 +44,7 @@ public class DefaultApplication extends Application {
         // register helper
         DbHelperStore.registerHelper(new SQLiteOpenHelperImpl(this), DAO_TYPES);
 
-        Dao<CatchPhrase> catchPhraseDao = DaoManager.getDao(CatchPhrase.class);
+        final Dao<CatchPhrase> catchPhraseDao = DaoManager.getDao(CatchPhrase.class);
         Dao<Collection> collectionDao = DaoManager.getDao(Collection.class);
 
         collectionDao.deleteAll();
@@ -56,7 +59,7 @@ public class DefaultApplication extends Application {
         }
 
         File zipFile = new File(Environment.getExternalStorageDirectory(), "lakatoš.zip");
-        File tempDir = new File(getCacheDir(), UUID.randomUUID().toString());
+        final File tempDir = new File(getCacheDir(), UUID.randomUUID().toString());
 
         Archives.unzip(zipFile, tempDir);
 
@@ -68,8 +71,29 @@ public class DefaultApplication extends Application {
         });
         if (match.isPresent()) {
             Config config = ConfigManager.load(match.get().getAbsolutePath());
-            Toast.makeText(this, match.get().getName() + " is present. Path: " + match.get().getPath(), Toast
-                    .LENGTH_SHORT).show();
+            final File metadataDir = match.get().getParentFile();
+
+            List<CatchPhrase> catchPhrases = Lists.transform(config.getSounds(), new Function<Sound, CatchPhrase>() {
+                @Override
+                public CatchPhrase apply(Sound input) {
+                    File file = new File(metadataDir, input.getFileName());
+                    byte[] data = null;
+                    try {
+                        data = Files.toByteArray(file);
+                    } catch (IOException e) {
+                    }
+
+                    CatchPhrase newCatchPhrase = new CatchPhrase(input.getText(), data);
+                    long id = catchPhraseDao.create(newCatchPhrase);
+                    newCatchPhrase.setId((int) id);
+                    return newCatchPhrase;
+                }
+            });
+            Collection newCollection = new Collection(config.getCollectionName(), 0.0, Color.parseColor(config.getCollectionColor()),
+                    State.IMPORTED, catchPhrases);
+            collectionDao.create(newCollection);
+//            Toast.makeText(this, match.get().getName() + " is present. Path: " + match.get().getPath(), Toast
+//                    .LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "Nothing...", Toast.LENGTH_SHORT).show();
         }
