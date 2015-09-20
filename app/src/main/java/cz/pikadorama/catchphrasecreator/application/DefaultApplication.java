@@ -4,19 +4,18 @@ import android.app.Application;
 import android.graphics.Color;
 import android.os.Environment;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
-import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import cz.pikadorama.catchphrasecreator.Const;
 import cz.pikadorama.catchphrasecreator.collection.Config;
 import cz.pikadorama.catchphrasecreator.collection.ConfigManager;
 import cz.pikadorama.catchphrasecreator.collection.Sound;
@@ -24,7 +23,6 @@ import cz.pikadorama.catchphrasecreator.database.SQLiteOpenHelperImpl;
 import cz.pikadorama.catchphrasecreator.pojo.CatchPhrase;
 import cz.pikadorama.catchphrasecreator.pojo.Collection;
 import cz.pikadorama.catchphrasecreator.pojo.State;
-import cz.pikadorama.catchphrasecreator.Const;
 import cz.pikadorama.framework.database.DbHelperStore;
 import cz.pikadorama.framework.database.dao.Dao;
 import cz.pikadorama.framework.database.dao.DaoManager;
@@ -73,29 +71,27 @@ public class DefaultApplication extends Application {
             Config config = ConfigManager.load(match.get().getAbsolutePath());
             final File metadataDir = match.get().getParentFile();
 
-            List<CatchPhrase> catchPhrases = Lists.transform(config.getSounds(), new Function<Sound, CatchPhrase>() {
-                @Override
-                public CatchPhrase apply(Sound input) {
-                    File file = new File(metadataDir, input.getFileName());
-                    byte[] data = null;
-                    try {
-                        data = Files.toByteArray(file);
-                    } catch (IOException e) {
-                    }
-
-                    CatchPhrase newCatchPhrase = new CatchPhrase(input.getText(), data);
-                    long id = catchPhraseDao.create(newCatchPhrase);
-                    newCatchPhrase.setId((int) id);
-                    return newCatchPhrase;
+            List<CatchPhrase> catchPhrases = new ArrayList<>();
+            for (Sound sound : config.getSounds()) {
+                File file = new File(metadataDir, sound.getFileName());
+                byte[] data = null;
+                try {
+                    data = Files.toByteArray(file);
+                } catch (IOException e) {
                 }
-            });
+
+                CatchPhrase newCatchPhrase = new CatchPhrase(sound.getText(), data);
+                long id = catchPhraseDao.create(newCatchPhrase);
+                newCatchPhrase.setId((int) id);
+                catchPhrases.add(newCatchPhrase);
+            }
             Collection newCollection = new Collection(config.getCollectionName(), 0.0, Color.parseColor(config.getCollectionColor()),
                     State.IMPORTED, catchPhrases);
             collectionDao.create(newCollection);
-//            Toast.makeText(this, match.get().getName() + " is present. Path: " + match.get().getPath(), Toast
-//                    .LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "Nothing...", Toast.LENGTH_SHORT).show();
+////            Toast.makeText(this, match.get().getName() + " is present. Path: " + match.get().getPath(), Toast
+////                    .LENGTH_SHORT).show();
+//        } else {
+//            Toast.makeText(this, "Nothing...", Toast.LENGTH_SHORT).show();
         }
 
         catchPhraseDao.create(new CatchPhrase("Ahoj !", buffer));
