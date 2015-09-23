@@ -13,7 +13,7 @@ import java.util.List;
 import cz.pikadorama.framework.database.DbDataType;
 import cz.pikadorama.framework.database.annotation.DbColumn;
 import cz.pikadorama.framework.database.annotation.DbTable;
-import cz.pikadorama.framework.database.dao.DaoManager;
+import cz.pikadorama.framework.database.DaoManager;
 import cz.pikadorama.framework.database.dao.DaoQueryHelper;
 import cz.pikadorama.framework.util.Strings;
 

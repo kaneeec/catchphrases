@@ -12,14 +12,14 @@ import java.util.List;
 import cz.pikadorama.catchphrasecreator.R;
 import cz.pikadorama.framework.util.Views;
 
-public class TextAdapter extends ArrayAdapter<String> {
+public class CatchPhraseAdapter extends ArrayAdapter<String> {
 
-    public TextAdapter(Context context, List<String> messages) {
+    public CatchPhraseAdapter(Context context, List<String> messages) {
         super(context, 0, messages);
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        View gridView = LayoutInflater.from(getContext()).inflate(R.layout.grid_view_item, null);
+        View gridView = LayoutInflater.from(getContext()).inflate(R.layout.item_catch_phrase, null);
 
         TextView textView = Views.require(gridView, R.id.grid_item_label);
         textView.setText(getItem(position));

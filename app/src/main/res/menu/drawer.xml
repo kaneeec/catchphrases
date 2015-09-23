@@ -5,10 +5,10 @@
         <item
             android:id="@+id/your_collections"
             android:checked="true"
-            android:title="Your collections" />
+            android:title="@string/drawer_your_collections" />
         <item
             android:id="@+id/manage_collections"
-            android:title="Manage collections" />
+            android:title="@string/drawer_manage_collections" />
     </group>
     <group
         android:id="@+id/commons"
@@ -16,9 +16,9 @@
         <item
             android:id="@+id/settings"
             android:checked="true"
-            android:title="Settings" />
+            android:title="@string/drawer_settings" />
         <item
             android:id="@+id/about"
-            android:title="About" />
+            android:title="@string/drawer_about" />
     </group>
 </menu>

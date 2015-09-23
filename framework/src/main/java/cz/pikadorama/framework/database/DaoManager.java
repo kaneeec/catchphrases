@@ -1,4 +1,4 @@
-package cz.pikadorama.framework.database.dao;
+package cz.pikadorama.framework.database;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -14,9 +14,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cz.pikadorama.framework.database.DbUtil;
 import cz.pikadorama.framework.database.annotation.DbTable;
-import cz.pikadorama.framework.database.DbHelperStore;
+import cz.pikadorama.framework.database.dao.Dao;
+import cz.pikadorama.framework.database.dao.DaoQueryHelper;
 import cz.pikadorama.framework.util.Strings;
 
 
@@ -88,7 +88,7 @@ public class DaoManager {
 
         @Override
         public T getById(int id) {
-            try (SQLiteDatabase db = DbHelperStore.getInstance().getReadableDatabase()) {
+            try (SQLiteDatabase db = DbHelperManager.getInstance().getReadableDatabase()) {
                 try (Cursor cursor = db.query(tableName, columnNames, BaseColumns._ID + " = ?", new String[]{String.valueOf(id)}, null, null, null)) {
                     return helper.cursorToObject(cursor);
                 }
@@ -108,7 +108,7 @@ public class DaoManager {
                 }
             });
 
-            try (SQLiteDatabase db = DbHelperStore.getInstance().getReadableDatabase()) {
+            try (SQLiteDatabase db = DbHelperManager.getInstance().getReadableDatabase()) {
                 try (Cursor cursor = db.query(tableName, columnNames, BaseColumns._ID + " IN " + Strings.makeSqlPlaceholders(stringIds.size()), stringIds.toArray(new String[stringIds.size()]), null, null, null)) {
                     List<T> list = new ArrayList<>();
                     while (cursor.moveToNext()) {
@@ -122,7 +122,7 @@ public class DaoManager {
         @Override
         public long create(T obj) {
             if (obj != null) {
-                try (SQLiteDatabase db = DbHelperStore.getInstance().getWritableDatabase()) {
+                try (SQLiteDatabase db = DbHelperManager.getInstance().getWritableDatabase()) {
                     ContentValues values = helper.objectToContentValues(obj);
                     return db.insert(tableName, null, values);
                 }
@@ -133,7 +133,7 @@ public class DaoManager {
         @Override
         public void update(T obj) {
             if (obj != null) {
-                try (SQLiteDatabase db = DbHelperStore.getInstance().getReadableDatabase()) {
+                try (SQLiteDatabase db = DbHelperManager.getInstance().getReadableDatabase()) {
                     ContentValues values = helper.objectToContentValues(obj);
                     db.update(tableName, values, BaseColumns._ID + " = ?", new String[]{String.valueOf(helper.getId(obj))});
                 }
@@ -143,7 +143,7 @@ public class DaoManager {
         @Override
         public void delete(T obj) {
             if (obj != null) {
-                try (SQLiteDatabase db = DbHelperStore.getInstance().getWritableDatabase()) {
+                try (SQLiteDatabase db = DbHelperManager.getInstance().getWritableDatabase()) {
                     db.delete(tableName, BaseColumns._ID + " = ?", new String[]{String.valueOf(helper.getId(obj))});
                 }
             }
@@ -151,21 +151,21 @@ public class DaoManager {
 
         @Override
         public void delete(int id) {
-            try (SQLiteDatabase db = DbHelperStore.getInstance().getWritableDatabase()) {
+            try (SQLiteDatabase db = DbHelperManager.getInstance().getWritableDatabase()) {
                 db.delete(tableName, BaseColumns._ID + " = ?", new String[]{String.valueOf(id)});
             }
         }
 
         @Override
         public void deleteAll() {
-            try (SQLiteDatabase db = DbHelperStore.getInstance().getWritableDatabase()) {
+            try (SQLiteDatabase db = DbHelperManager.getInstance().getWritableDatabase()) {
                 db.execSQL("delete from " + tableName);
             }
         }
 
         @Override
         public List<T> findAll() {
-            try (SQLiteDatabase db = DbHelperStore.getInstance().getReadableDatabase()) {
+            try (SQLiteDatabase db = DbHelperManager.getInstance().getReadableDatabase()) {
                 try (Cursor cursor = db.query(tableName, columnNames, null, null, null, null, null)) {
                     List<T> list = new ArrayList<>();
                     while (cursor.moveToNext()) {
@@ -181,7 +181,7 @@ public class DaoManager {
             if (query == null || query.isEmpty() || columnNames == null | columnNames.length == 0) {
                 return Collections.emptyList();
             }
-            try (SQLiteDatabase db = DbHelperStore.getInstance().getReadableDatabase()) {
+            try (SQLiteDatabase db = DbHelperManager.getInstance().getReadableDatabase()) {
                 try (Cursor cursor = db.rawQuery(query, columnNames)) {
                     List<T> list = new ArrayList<>();
                     while (cursor.moveToNext()) {

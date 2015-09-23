@@ -11,19 +11,19 @@ import cz.pikadorama.framework.util.Closeables;
 /**
  * Created by Tomas on 5.9.2015.
  */
-public final class DbHelperStore {
+public final class DbHelperManager {
 
     private static SQLiteOpenHelper helper = null;
 
     /**
      * Register your {@link SQLiteOpenHelper} implementation. After the helper is registered, whole database
-     * structure is created and initialized. You can than use {@link cz.pikadorama.framework.database.dao.DaoManager}
+     * structure is created and initialized. You can than use {@link DaoManager}
      * to get DAO implementations for desired classes.
      *
      * @param helperToRegister {@link SQLiteOpenHelper} implementation
      * @param entityClasses array of entity classes that you want to be handled automatically by the framework
      *                      (they must be annotated with the {@link DbTable} annotation}
-     * @see cz.pikadorama.framework.database.dao.DaoManager
+     * @see DaoManager
      */
     public synchronized static final void registerHelper(SQLiteOpenHelper helperToRegister, Class<?> ... entityClasses) {
         if (helper != null) {
@@ -33,7 +33,7 @@ public final class DbHelperStore {
             DbUtil.initDbUtil(entityClasses);
 
             // create tables when first run
-            SQLiteDatabase db = DbHelperStore.getInstance().getReadableDatabase();
+            SQLiteDatabase db = DbHelperManager.getInstance().getReadableDatabase();
             Closeables.closeQuietly(db);
         }
     }

@@ -1,4 +1,4 @@
-package cz.pikadorama.catchphrasecreator.collection;
+package cz.pikadorama.catchphrasecreator.config;
 
 /**
  * Created by Tomas on 14.9.2015.

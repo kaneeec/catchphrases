@@ -15,19 +15,19 @@ import android.widget.ListView;
 import java.util.List;
 
 import cz.pikadorama.catchphrasecreator.R;
-import cz.pikadorama.catchphrasecreator.adapter.CollectionsAdapter;
+import cz.pikadorama.catchphrasecreator.adapter.CollectionAdapter;
 import cz.pikadorama.catchphrasecreator.pojo.Collection;
 import cz.pikadorama.catchphrasecreator.Const;
 import cz.pikadorama.framework.util.ActivityParams;
 import cz.pikadorama.framework.database.dao.Dao;
-import cz.pikadorama.framework.database.dao.DaoManager;
+import cz.pikadorama.framework.database.DaoManager;
 
 /**
  * Created by Tomas on 11.8.2015.
  */
 public class MainActivity extends BaseActivity {
 
-    private CollectionsAdapter adapter;
+    private CollectionAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +81,7 @@ public class MainActivity extends BaseActivity {
     private void initListView() {
         Dao<Collection> dao = DaoManager.getDao(Collection.class);
         List<Collection> collections = dao.findAll();
-        adapter = new CollectionsAdapter(this, collections);
+        adapter = new CollectionAdapter(this, collections);
 
         ListView listView = (ListView) findViewById(android.R.id.list);
         listView.setAdapter(adapter);

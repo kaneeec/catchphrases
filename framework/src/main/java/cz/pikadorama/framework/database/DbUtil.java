@@ -16,7 +16,6 @@ import java.util.Map;
 import cz.pikadorama.framework.Const;
 import cz.pikadorama.framework.database.annotation.DbColumn;
 import cz.pikadorama.framework.database.annotation.DbTable;
-import cz.pikadorama.framework.database.dao.DaoManager;
 import cz.pikadorama.framework.database.dao.DaoQueryHelper;
 
 
@@ -35,7 +34,7 @@ public class DbUtil {
      * @return list of column names
      * @throws IllegalArgumentException if the table does not exist
      */
-    public synchronized static List<String> getColumnNames(String tableName) {
+    synchronized static List<String> getColumnNames(String tableName) {
         List<String> columnNames = tablesAndColumns.get(tableName);
         if (columnNames == null) {
             throw new IllegalArgumentException("There is no Table named " + tableName);

@@ -15,7 +15,7 @@ import com.google.common.collect.Lists;
 import java.util.List;
 
 import cz.pikadorama.catchphrasecreator.R;
-import cz.pikadorama.catchphrasecreator.adapter.TextAdapter;
+import cz.pikadorama.catchphrasecreator.adapter.CatchPhraseAdapter;
 import cz.pikadorama.catchphrasecreator.pojo.CatchPhrase;
 import cz.pikadorama.catchphrasecreator.pojo.Collection;
 import cz.pikadorama.catchphrasecreator.Const;
@@ -46,7 +46,7 @@ public class CatchphrasesActivity extends BaseActivity {
         });
 
         GridView gridview = (GridView) findViewById(R.id.gridview);
-        gridview.setAdapter(new TextAdapter(this, catchPhrases));
+        gridview.setAdapter(new CatchPhraseAdapter(this, catchPhrases));
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {

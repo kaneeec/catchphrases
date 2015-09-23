@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView android:id="@+id/grid_item_label"
+          xmlns:android="http://schemas.android.com/apk/res/android"
+          android:layout_width="fill_parent"
+          android:layout_height="fill_parent"
+          android:gravity="center"
+          android:lines="3"
+          android:minHeight="@dimen/tile_height"
+          android:paddingLeft="@dimen/tile_padding"
+          android:paddingRight="@dimen/tile_padding"
+          android:textColor="@color/primary_text"
+          android:textSize="@dimen/tile_text_size"/>

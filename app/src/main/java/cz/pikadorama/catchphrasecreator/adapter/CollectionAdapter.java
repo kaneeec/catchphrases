@@ -17,9 +17,9 @@ import cz.pikadorama.framework.view.IconView;
 /**
  * Created by Tomas on 5.9.2015.
  */
-public class CollectionsAdapter extends ArrayAdapter<Collection> {
+public class CollectionAdapter extends ArrayAdapter<Collection> {
 
-    public CollectionsAdapter(Context context, List<Collection> collections) {
+    public CollectionAdapter(Context context, List<Collection> collections) {
         super(context, 0, collections);
     }
 

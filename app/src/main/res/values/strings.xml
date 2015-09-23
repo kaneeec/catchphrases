@@ -7,4 +7,11 @@
     <string name="error_cannot_play_sound">Zvuk nelze přehrát</string>
 
     <string name="title_activity_configure_widget">Nastavení widgetu</string>
+
+    <string name="save">Uložit</string>
+
+    <string name="drawer_settings">Nastavení</string>
+    <string name="drawer_about">O aplikaci</string>
+    <string name="drawer_manage_collections">Správa kolekcí</string>
+    <string name="drawer_your_collections">Vaše kolekce</string>
 </resources>

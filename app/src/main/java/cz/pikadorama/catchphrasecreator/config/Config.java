@@ -1,4 +1,4 @@
-package cz.pikadorama.catchphrasecreator.collection;
+package cz.pikadorama.catchphrasecreator.config;
 
 import java.util.List;
 

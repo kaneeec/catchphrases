@@ -23,36 +23,26 @@ import cz.pikadorama.framework.Const;
  */
 public class Archives {
 
-    public static void unzip(File fileToUnzip, File targetDirectory) {
-        try {
-            ZipFile zipFile = new ZipFile(fileToUnzip);
-            zipFile.extractAll(targetDirectory.getAbsolutePath());
-        } catch (ZipException e) {
-            Log.e(Const.TAG, e.getMessage(), e);
-        }
-//        try (ZipInputStream zipInputStream = new ZipInputStream(
-//                new BufferedInputStream(new FileInputStream(zipFile)))) {
-//            ZipEntry zipEntry;
-//            while ((zipEntry = zipInputStream.getNextEntry()) != null) {
-//                File outputFile = new File(targetDirectory, zipEntry.getName());
-//                File outputFileParentDir = zipEntry.isDirectory() ? outputFile : outputFile.getParentFile();
-//
-//                if (!outputFileParentDir.isDirectory() && !outputFileParentDir.mkdirs()) {
-//                    Log.e(Const.TAG, "Unable to create output directory: " + outputFileParentDir);
-//                }
-//
-//                if (zipEntry.isDirectory()) {
-//                    continue;
-//                }
-//
-//                try (FileOutputStream outputStream = new FileOutputStream(outputFile)) {
-//                    ByteStreams.copy(zipInputStream, outputStream);
-//                    outputStream.flush();
-//                }
-//            }
-//        } catch (IOException e) {
-//            Log.e(Const.TAG, e.getMessage(), e);
-//        }
+    /**
+     * Unzips the given zip archives to the specified directory.
+     *
+     * @param fileToUnzip zip file
+     * @param targetDirectory output directory
+     * @throws ZipException in case the file cannot be unzipped
+     */
+    public static void unzip(File fileToUnzip, File targetDirectory) throws ZipException {
+        ZipFile zipFile = new ZipFile(fileToUnzip);
+        zipFile.extractAll(targetDirectory.getAbsolutePath());
+    }
+
+    /**
+     * Zips the given directory with all its files to the specified output file.
+     *
+     * @param directoryToZip directory to archive
+     * @param zipFile result zip file
+     */
+    public static void zip(File directoryToZip, File zipFile) {
+        throw new UnsupportedOperationException();
     }
 
 }
