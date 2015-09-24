@@ -1,26 +1,37 @@
 package cz.pikadorama.catchphrasecreator.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import net.lingala.zip4j.exception.ZipException;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
+import cz.pikadorama.catchphrasecreator.Const;
 import cz.pikadorama.catchphrasecreator.R;
 import cz.pikadorama.catchphrasecreator.adapter.CollectionAdapter;
+import cz.pikadorama.catchphrasecreator.config.ConfigManager;
 import cz.pikadorama.catchphrasecreator.pojo.Collection;
-import cz.pikadorama.catchphrasecreator.Const;
-import cz.pikadorama.framework.util.ActivityParams;
-import cz.pikadorama.framework.database.dao.Dao;
+import cz.pikadorama.catchphrasecreator.pojo.State;
 import cz.pikadorama.framework.database.DaoManager;
+import cz.pikadorama.framework.database.dao.Dao;
+import cz.pikadorama.framework.util.ActivityParams;
+import cz.pikadorama.framework.util.FilePicker;
 
 /**
  * Created by Tomas on 11.8.2015.
@@ -51,6 +62,26 @@ public class MainActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        switch (requestCode) {
+            case FilePicker.FILE_SELECT_CODE:
+                if (resultCode == RESULT_OK) {
+                    String filePath = FilePicker.resolvePath(MainActivity.this, intent.getData());
+                    try {
+                        Toast.makeText(MainActivity.this, "Loading data ...", Toast.LENGTH_SHORT).show();
+                        ConfigManager.loadZip(new File(filePath), State.IMPORTED, MainActivity.this);
+                        initListView();
+                    } catch (ZipException | IOException e) {
+                        Log.e(Const.TAG, e.getMessage(), e);
+                        Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+                break;
+        }
+        super.onActivityResult(requestCode, resultCode, intent);
+    }
+
     private void initDrawer() {
         final DrawerLayout drawer = findView(R.id.drawer);
         final NavigationView view = findView(R.id.navigation_view);
@@ -62,6 +93,8 @@ public class MainActivity extends BaseActivity {
                         // no action here
                         break;
                     case R.id.manage_collections:
+                        Intent intent = FilePicker.getIntent(MainActivity.this);
+                        startActivityForResult(intent, FilePicker.FILE_SELECT_CODE);
                         // TODO
                         break;
                     case R.id.settings:

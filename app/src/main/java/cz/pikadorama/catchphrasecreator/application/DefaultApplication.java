@@ -39,13 +39,5 @@ public class DefaultApplication extends Application {
 
         collectionDao.deleteAll();
         catchPhraseDao.deleteAll();
-
-        try {
-            ConfigManager.loadZip(new File(Environment.getExternalStorageDirectory(), "lakatoš.zip"), State.IMPORTED,
-                    DefaultApplication.this);
-        } catch (ZipException | IOException e) {
-            Log.e(Const.TAG, e.getMessage(), e);
-            Toast.makeText(DefaultApplication.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
     }
 }
