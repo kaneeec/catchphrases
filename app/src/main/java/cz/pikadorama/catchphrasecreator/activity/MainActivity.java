@@ -91,6 +91,7 @@ public class MainActivity extends BaseActivity {
                 switch (item.getItemId()) {
                     case R.id.your_collections:
                         // no action here
+                        // TODO
                         break;
                     case R.id.manage_collections:
                         Intent intent = FilePicker.getIntent(MainActivity.this);
@@ -98,6 +99,7 @@ public class MainActivity extends BaseActivity {
                         // TODO
                         break;
                     case R.id.settings:
+                        startActivity(new Intent(MainActivity.this, ManageCollectionActivity.class));
                         // TODO
                         break;
                     case R.id.about:

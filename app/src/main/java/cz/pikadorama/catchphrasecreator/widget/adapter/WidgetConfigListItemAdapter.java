@@ -24,7 +24,7 @@ public class WidgetConfigListItemAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        convertView = inflater.inflate(R.layout.list_item, parent, false);
+        convertView = inflater.inflate(R.layout.item_catch_phrase_widget, parent, false);
         TextView textView = (TextView) convertView.findViewById(R.id.textView);
         textView.setText(messages.get(position));
         return convertView;

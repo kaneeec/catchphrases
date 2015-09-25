@@ -34,10 +34,10 @@ public class DefaultApplication extends Application {
         // register helper
         DbHelperManager.registerHelper(new SQLiteOpenHelperImpl(this), DAO_TYPES);
 
-        Dao<CatchPhrase> catchPhraseDao = DaoManager.getDao(CatchPhrase.class);
-        Dao<Collection> collectionDao = DaoManager.getDao(Collection.class);
-
-        collectionDao.deleteAll();
-        catchPhraseDao.deleteAll();
+//        Dao<CatchPhrase> catchPhraseDao = DaoManager.getDao(CatchPhrase.class);
+//        Dao<Collection> collectionDao = DaoManager.getDao(Collection.class);
+//
+//        collectionDao.deleteAll();
+//        catchPhraseDao.deleteAll();
     }
 }
