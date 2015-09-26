@@ -24,6 +24,10 @@ android {
     }
 }
 
+repositories {
+    jcenter()
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile project(':framework')
@@ -32,4 +36,5 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:22.2.1'
     compile 'com.android.support:support-v13:22.2.1'
     compile 'com.google.code.gson:gson:2.2.4'
+    compile 'com.pes.materialcolorpicker:library:1.0.1'
 }

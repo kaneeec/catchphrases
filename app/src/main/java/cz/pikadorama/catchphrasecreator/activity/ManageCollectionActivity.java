@@ -8,6 +8,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.pes.androidmaterialcolorpickerdialog.ColorPicker;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,13 +39,12 @@ public class ManageCollectionActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_collection);
 
-        Dao<Collection> collectionDao = DaoManager.getDao(Collection.class);
-        Collection collection = collectionDao.findAll().get(0);
+        final Dao<Collection> collectionDao = DaoManager.getDao(Collection.class);
+        final Collection collection = collectionDao.findAll().get(0);
 
         LinearLayout layout = findView(R.id.layout);
 
         for (CatchPhrase catchPhrase : collection.getCatchPhrases()) {
-            Log.d(Const.TAG, catchPhrase.toString());
             View item = LayoutInflater.from(ManageCollectionActivity.this).inflate(R.layout
                     .item_manage_collection_item, null);
 
@@ -76,6 +78,27 @@ public class ManageCollectionActivity extends BaseActivity {
                     catchPhraseDao.update(catchPhrase);
                     finish();
                 }
+            }
+        });
+
+        Button colorPicker = findView(R.id.color_picker_button);
+        colorPicker.setBackgroundColor(collection.getColor());
+        colorPicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final ColorPicker cp = new ColorPicker(ManageCollectionActivity.this);
+                cp.show();
+
+                /* On Click listener for the dialog, when the user select the color */
+                Button okColor = (Button)cp.findViewById(R.id.okColorButton);
+                okColor.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        collection.setColor(cp.getColor());
+                        collectionDao.update(collection);
+                        cp.dismiss();
+                    }
+                });
             }
         });
 

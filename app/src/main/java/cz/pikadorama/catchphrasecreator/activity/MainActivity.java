@@ -39,6 +39,7 @@ import cz.pikadorama.framework.util.FilePicker;
 public class MainActivity extends BaseActivity {
 
     private CollectionAdapter adapter;
+    private int drawerSelectedItemId = R.id.your_collections;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +89,26 @@ public class MainActivity extends BaseActivity {
         view.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
-                switch (item.getItemId()) {
+                drawerSelectedItemId = item.getItemId();
+                item.setChecked(true);
+                drawer.closeDrawers();
+                return true;
+            }
+        });
+        drawer.setDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                switch (drawerSelectedItemId) {
                     case R.id.your_collections:
                         // no action here
                         // TODO
@@ -106,12 +126,15 @@ public class MainActivity extends BaseActivity {
                         // TODO
                         break;
                 }
-                item.setChecked(true);
-                drawer.closeDrawers();
-                return true;
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
             }
         });
     }
+
 
     private void initListView() {
         Dao<Collection> dao = DaoManager.getDao(Collection.class);
