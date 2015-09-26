@@ -24,7 +24,10 @@
             android:name=".activity.CatchphrasesActivity"
             android:label="@string/app_name"/>
         <activity
-            android:name=".activity.ManageCollectionActivity"
+            android:name=".activity.CreateCollectionActivity"
+            android:label="@string/app_name"/>
+        <activity
+            android:name=".activity.EditCollectionActivity"
             android:label="@string/app_name"/>
 
         <activity

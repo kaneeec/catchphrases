@@ -1,14 +1,11 @@
 package cz.pikadorama.catchphrasecreator.activity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.pes.androidmaterialcolorpickerdialog.ColorPicker;
 
@@ -17,7 +14,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cz.pikadorama.catchphrasecreator.Const;
 import cz.pikadorama.catchphrasecreator.R;
 import cz.pikadorama.catchphrasecreator.pojo.CatchPhrase;
 import cz.pikadorama.catchphrasecreator.pojo.Collection;
@@ -29,7 +25,7 @@ import cz.pikadorama.framework.util.Views;
 /**
  * Created by Tomas on 25.9.2015.
  */
-public class ManageCollectionActivity extends BaseActivity {
+public class EditCollectionActivity extends BaseActivity {
 
     private Map<Integer, CatchPhrase> phrasesById = new HashMap<>();
     private List<LineObjects> lines = new ArrayList<>();
@@ -37,7 +33,7 @@ public class ManageCollectionActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_manage_collection);
+        setContentView(R.layout.activity_edit_collection);
 
         final Dao<Collection> collectionDao = DaoManager.getDao(Collection.class);
         final Collection collection = collectionDao.findAll().get(0);
@@ -45,7 +41,7 @@ public class ManageCollectionActivity extends BaseActivity {
         LinearLayout layout = findView(R.id.layout);
 
         for (CatchPhrase catchPhrase : collection.getCatchPhrases()) {
-            View item = LayoutInflater.from(ManageCollectionActivity.this).inflate(R.layout
+            View item = LayoutInflater.from(EditCollectionActivity.this).inflate(R.layout
                     .item_manage_collection_item, null);
 
             EditText itemText = Views.require(item, R.id.text);
@@ -57,7 +53,7 @@ public class ManageCollectionActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     CatchPhrase catchPhrase1 = phrasesById.get(v.getId());
-                    SoundPlayer.getInstance(ManageCollectionActivity.this).play(catchPhrase1.getSoundData());
+                    SoundPlayer.getInstance(EditCollectionActivity.this).play(catchPhrase1.getSoundData());
                 }
             });
 
@@ -86,7 +82,7 @@ public class ManageCollectionActivity extends BaseActivity {
         colorPicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final ColorPicker cp = new ColorPicker(ManageCollectionActivity.this);
+                final ColorPicker cp = new ColorPicker(EditCollectionActivity.this);
                 cp.show();
 
                 /* On Click listener for the dialog, when the user select the color */
@@ -104,7 +100,7 @@ public class ManageCollectionActivity extends BaseActivity {
 
     }
 
-    private static final class LineObjects {
+    public static final class LineObjects {
         private final EditText editText;
         private final Button playButton;
 

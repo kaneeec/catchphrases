@@ -1,9 +1,7 @@
 package cz.pikadorama.catchphrasecreator.activity;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -110,16 +108,19 @@ public class MainActivity extends BaseActivity {
             public void onDrawerClosed(View drawerView) {
                 switch (drawerSelectedItemId) {
                     case R.id.your_collections:
-                        // no action here
+                        // temporarily new collection
+                        startActivity(new Intent(MainActivity.this, CreateCollectionActivity.class));
                         // TODO
                         break;
                     case R.id.manage_collections:
+                        // temporarily load
                         Intent intent = FilePicker.getIntent(MainActivity.this);
                         startActivityForResult(intent, FilePicker.FILE_SELECT_CODE);
                         // TODO
                         break;
                     case R.id.settings:
-                        startActivity(new Intent(MainActivity.this, ManageCollectionActivity.class));
+                        // temporarily edit
+                        startActivity(new Intent(MainActivity.this, EditCollectionActivity.class));
                         // TODO
                         break;
                     case R.id.about:
