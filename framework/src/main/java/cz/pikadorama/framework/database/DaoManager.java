@@ -124,7 +124,9 @@ public class DaoManager {
             if (obj != null) {
                 try (SQLiteDatabase db = DbHelperManager.getInstance().getWritableDatabase()) {
                     ContentValues values = helper.objectToContentValues(obj);
-                    return db.insert(tableName, null, values);
+                    long id = db.insert(tableName, null, values);
+                    helper.setId(obj, (int) id);
+                    return id;
                 }
             }
             return -1;

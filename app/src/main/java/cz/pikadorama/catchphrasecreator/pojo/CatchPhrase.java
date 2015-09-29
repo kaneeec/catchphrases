@@ -97,5 +97,10 @@ public class CatchPhrase implements BaseColumns, Serializable {
         public Integer getId(CatchPhrase obj) {
             return obj.getId();
         }
+
+        @Override
+        public void setId(CatchPhrase obj, Integer id) {
+            obj.setId(id);
+        }
     }
 }

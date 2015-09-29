@@ -1,4 +1,4 @@
-package cz.pikadorama.catchphrasecreator.config;
+package cz.pikadorama.catchphrasecreator.sharing;
 
 import java.util.List;
 

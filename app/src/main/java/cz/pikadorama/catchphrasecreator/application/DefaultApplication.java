@@ -1,21 +1,10 @@
 package cz.pikadorama.catchphrasecreator.application;
 
 import android.app.Application;
-import android.os.Environment;
-import android.util.Log;
-import android.widget.Toast;
 
-import net.lingala.zip4j.exception.ZipException;
-
-import java.io.File;
-import java.io.IOException;
-
-import cz.pikadorama.catchphrasecreator.Const;
-import cz.pikadorama.catchphrasecreator.config.ConfigManager;
 import cz.pikadorama.catchphrasecreator.database.SQLiteOpenHelperImpl;
 import cz.pikadorama.catchphrasecreator.pojo.CatchPhrase;
 import cz.pikadorama.catchphrasecreator.pojo.Collection;
-import cz.pikadorama.catchphrasecreator.pojo.State;
 import cz.pikadorama.framework.database.DaoManager;
 import cz.pikadorama.framework.database.DbHelperManager;
 import cz.pikadorama.framework.database.dao.Dao;
@@ -34,10 +23,10 @@ public class DefaultApplication extends Application {
         // register helper
         DbHelperManager.registerHelper(new SQLiteOpenHelperImpl(this), DAO_TYPES);
 
-//        Dao<CatchPhrase> catchPhraseDao = DaoManager.getDao(CatchPhrase.class);
-//        Dao<Collection> collectionDao = DaoManager.getDao(Collection.class);
-//
-//        collectionDao.deleteAll();
-//        catchPhraseDao.deleteAll();
+        Dao<CatchPhrase> catchPhraseDao = DaoManager.getDao(CatchPhrase.class);
+        Dao<Collection> collectionDao = DaoManager.getDao(Collection.class);
+
+        collectionDao.deleteAll();
+        catchPhraseDao.deleteAll();
     }
 }

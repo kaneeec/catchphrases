@@ -1,8 +1,7 @@
-package cz.pikadorama.catchphrasecreator.config;
+package cz.pikadorama.catchphrasecreator.sharing;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -22,7 +21,6 @@ import java.util.Objects;
 import java.util.UUID;
 
 import cz.pikadorama.catchphrasecreator.Const;
-import cz.pikadorama.catchphrasecreator.application.DefaultApplication;
 import cz.pikadorama.catchphrasecreator.pojo.CatchPhrase;
 import cz.pikadorama.catchphrasecreator.pojo.Collection;
 import cz.pikadorama.catchphrasecreator.pojo.State;
@@ -35,7 +33,20 @@ import cz.pikadorama.framework.util.Archives;
  */
 public class ConfigManager {
 
-    public static void loadZip(File zipFile, State state, Context context) throws ZipException, IOException {
+    public static final String METADATA_FILE = "metadata.json";
+    public static final double DEFAULT_RATING = 0.0;
+
+    /**
+     * Import Collection bundle from a zip file.
+     *
+     * @param zipFile zip file
+     * @param state state of the collection
+     * @param context context
+     * @throws ZipException in case the file cannot be read
+     * @throws IOException in case the file cannot be read
+     */
+    public static Collection loadZip(File zipFile, State state, Context context) throws ZipException, IOException {
+        // TODO make background process
         final File tempDir = new File(context.getCacheDir(), UUID.randomUUID().toString());
 
         Archives.unzip(zipFile, tempDir);
@@ -43,7 +54,7 @@ public class ConfigManager {
         Optional<File> match = Files.fileTreeTraverser().breadthFirstTraversal(tempDir).firstMatch(new Predicate<File>() {
             @Override
             public boolean apply(File input) {
-                return input.getName().equals("metadata.json");
+                return input.getName().equals(METADATA_FILE);
             }
         });
 
@@ -64,19 +75,17 @@ public class ConfigManager {
                     newCatchPhrase.setId((int) id);
                     catchPhrases.add(newCatchPhrase);
                 } catch (IOException e) {
-                    Log.e(Const.TAG, "Catch phrase does not contain correct sound data, skipping. File: " + sound
+                    throw new IOException("Catch phrase does not contain correct sound data, skipping. File: " + sound
                             .getFileName(), e);
                 }
             }
 
-            Collection newCollection = new Collection(config.getCollectionName(), 0.0, Color.parseColor(config.getCollectionColor()),
+            Collection newCollection = new Collection(config.getCollectionName(), DEFAULT_RATING, Color.parseColor(config.getCollectionColor()),
                     state, catchPhrases);
             collectionDao.create(newCollection);
-
-            Toast.makeText(context, "New collection " + config.getCollectionName() + " has been successfully imported" +
-                    ".", Toast.LENGTH_LONG).show();
+            return newCollection;
         } else {
-            throw new IOException("Incorrect ZIP file format. Please follow documentation.");
+            throw new IOException("Incorrect ZIP file format. Please follow the documentation.");
         }
     }
 

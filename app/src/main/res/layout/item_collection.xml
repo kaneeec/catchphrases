@@ -13,7 +13,7 @@
     <!--android:padding="4dp" />-->
 
     <TextView
-        android:id="@+id/collection_name"
+        android:id="@+id/input_collection_name"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:textColor="@color/primary_text"

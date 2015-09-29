@@ -64,6 +64,10 @@ public class Collection implements BaseColumns, Serializable {
         this.catchPhrases = catchPhrases;
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -165,6 +169,11 @@ public class Collection implements BaseColumns, Serializable {
         @Override
         public Integer getId(Collection obj) {
             return obj.getId();
+        }
+
+        @Override
+        public void setId(Collection obj, Integer id) {
+            obj.setId(id);
         }
     }
 }

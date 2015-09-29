@@ -20,6 +20,8 @@ import cz.pikadorama.catchphrasecreator.pojo.Collection;
 import cz.pikadorama.catchphrasecreator.util.SoundPlayer;
 import cz.pikadorama.framework.database.DaoManager;
 import cz.pikadorama.framework.database.dao.Dao;
+import cz.pikadorama.framework.event.EventManager;
+import cz.pikadorama.framework.event.EventType;
 import cz.pikadorama.framework.util.Views;
 
 /**
@@ -73,6 +75,7 @@ public class EditCollectionActivity extends BaseActivity {
                     Dao<CatchPhrase> catchPhraseDao = DaoManager.getDao(CatchPhrase.class);
                     catchPhraseDao.update(catchPhrase);
                     finish();
+                    EventManager.notifyEventProcessors(EventType.DATABASE_UPDATED);
                 }
             }
         });
@@ -104,9 +107,20 @@ public class EditCollectionActivity extends BaseActivity {
         private final EditText editText;
         private final Button playButton;
 
+        private byte[] soundData;
+
         public LineObjects(EditText editText, Button playButton) {
             this.editText = editText;
             this.playButton = playButton;
+        }
+
+        public LineObjects(EditText editText, Button playButton, byte[] soundData) {
+            this(editText, playButton);
+            this.soundData = soundData;
+        }
+
+        public byte[] getSoundData() {
+            return soundData;
         }
 
         public Button getPlayButton() {

@@ -12,7 +12,6 @@ import java.util.List;
 import cz.pikadorama.catchphrasecreator.R;
 import cz.pikadorama.catchphrasecreator.pojo.Collection;
 import cz.pikadorama.framework.util.Views;
-import cz.pikadorama.framework.view.IconView;
 
 /**
  * Created by Tomas on 5.9.2015.
@@ -28,7 +27,7 @@ public class CollectionAdapter extends ArrayAdapter<Collection> {
         View root = LayoutInflater.from(getContext()).inflate(R.layout.item_collection, parent, false);
         Collection collection = getItem(position);
 
-        TextView name = Views.require(root, R.id.collection_name);
+        TextView name = Views.require(root, R.id.input_collection_name);
         name.setText(collection.getName());
 //
 //        IconView icon = Views.require(root, R.id.icon);

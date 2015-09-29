@@ -32,4 +32,12 @@ public interface DaoQueryHelper<T> {
      */
     Integer getId(T obj);
 
+    /**
+     * Helper method to set ID of newly created object. Callback.
+     *
+     * @param obj new object (no ID yet)
+     * @param id id to set (provided by database)
+     */
+    void setId(T obj, Integer id);
+
 }

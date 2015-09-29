@@ -5,9 +5,29 @@ package cz.pikadorama.catchphrasecreator.pojo;
  */
 public enum State {
 
+    /**
+     * Collection imported from community.
+     */
     COMMUNITY,
+
+    /**
+     * Private collection. Created by the user.
+     */
     PERSONAL_PRIVATE,
+
+    /**
+     * Also created by the user but shared to the community.
+     */
     PERSONAL_SHARED,
-    IMPORTED;
+
+    /**
+     * Imported from a zip bundle.
+     */
+    IMPORTED,
+
+    /**
+     * Imported from a zip bundle and shared to the community.
+     */
+    IMPORTED_SHARED;
 
 }
