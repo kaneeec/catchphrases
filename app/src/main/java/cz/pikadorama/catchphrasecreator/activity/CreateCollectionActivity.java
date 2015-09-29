@@ -41,7 +41,7 @@ import cz.pikadorama.framework.util.Views;
  */
 public class CreateCollectionActivity extends BaseActivity {
 
-    private List<EditCollectionActivity.LineObjects> lines = new ArrayList<>();
+    private List<LineObjects> lines = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,15 +99,15 @@ public class CreateCollectionActivity extends BaseActivity {
     private void saveCollection() {
         Dao<CatchPhrase> catchPhraseDao = DaoManager.getDao(CatchPhrase.class);
         List<CatchPhrase> catchPhrases = new ArrayList<>();
-        for (EditCollectionActivity.LineObjects line : lines) {
+        for (LineObjects line : lines) {
             CatchPhrase catchPhrase = new CatchPhrase(line.getEditText().getText().toString(), line.getSoundData());
             catchPhraseDao.create(catchPhrase);
             catchPhrases.add(catchPhrase);
         }
 
-        EditText collectionEditText = findView(R.id.input_collection_name);
-        Collection collection = new Collection(collectionEditText.getText().toString(), 0.0, Color.YELLOW,
-                State.PERSONAL_PRIVATE, catchPhrases);
+        EditText collectionEditText = requireView(R.id.input_collection_name);
+        Collection collection = new Collection(collectionEditText.getText().toString(), 0.0, getResources().getColor
+                (R.color.primary), State.PERSONAL_PRIVATE, catchPhrases);
 
         Dao<Collection> collectionDao = DaoManager.getDao(Collection.class);
         collectionDao.create(collection);
@@ -122,22 +122,21 @@ public class CreateCollectionActivity extends BaseActivity {
             File file = new File(filePath);
             byte[] soundData = Files.toByteArray(file);
 
+            // initialize item and add it to the layout
+            LinearLayout layout = requireView(R.id.layout);
             View item = LayoutInflater.from(CreateCollectionActivity.this).inflate(R.layout
                             .item_manage_collection_item,
                     null);
 
-            // initialize item and add it to the layout
             EditText editText = Views.require(item, R.id.text);
             editText.setText(file.getName());
 
             Button playButton = Views.require(item, R.id.play_sound_button);
             playButton.setOnClickListener(new PlayCatchPhraseButtonListener(CreateCollectionActivity.this, soundData));
 
-            EditCollectionActivity.LineObjects line = new EditCollectionActivity.LineObjects(editText, playButton,
-                    soundData);
+            LineObjects line = new LineObjects(editText, playButton, layout, item, soundData);
             lines.add(line);
 
-            LinearLayout layout = findView(R.id.layout);
             layout.addView(item);
 
             // prepare remove button
@@ -149,27 +148,12 @@ public class CreateCollectionActivity extends BaseActivity {
         }
     }
 
-    private static final class AddCatchPhraseButtonListener implements View.OnClickListener {
-
-        private final Activity activity;
-
-        public AddCatchPhraseButtonListener(Activity activity) {
-            this.activity = activity;
-        }
-
-        @Override
-        public void onClick(android.view.View v) {
-            Intent intent = FilePicker.getIntent(activity);
-            activity.startActivityForResult(intent, FilePicker.FILE_SELECT_CODE);
-        }
-    }
-
     private static final class RemoveCatchPhraseButtonListener implements View.OnClickListener {
 
-        private final EditCollectionActivity.LineObjects line;
-        private final List<EditCollectionActivity.LineObjects> lines;
+        private final LineObjects line;
+        private final List<LineObjects> lines;
 
-        public RemoveCatchPhraseButtonListener(EditCollectionActivity.LineObjects line, List<EditCollectionActivity.LineObjects> lines) {
+        public RemoveCatchPhraseButtonListener(LineObjects line, List<LineObjects> lines) {
             this.line = line;
             this.lines = lines;
         }
@@ -177,6 +161,7 @@ public class CreateCollectionActivity extends BaseActivity {
         @Override
         public void onClick(View v) {
             lines.remove(line);
+            line.getParentLayout().removeView(line.getItem());
         }
     }
 
@@ -198,20 +183,22 @@ public class CreateCollectionActivity extends BaseActivity {
 
     public static final class LineObjects {
         private final LinearLayout parentLayout;
+        private final View item;
 
         private final EditText editText;
         private final Button playButton;
 
         private byte[] soundData;
 
-        public LineObjects(EditText editText, Button playButton, LinearLayout parentLayout) {
+        public LineObjects(EditText editText, Button playButton, LinearLayout parentLayout, View item) {
             this.editText = editText;
             this.playButton = playButton;
             this.parentLayout = parentLayout;
+            this.item = item;
         }
 
-        public LineObjects(EditText editText, Button playButton, LinearLayout parentLayout, byte[] soundData) {
-            this(editText, playButton, parentLayout);
+        public LineObjects(EditText editText, Button playButton, LinearLayout parentLayout, View item, byte[] soundData) {
+            this(editText, playButton, parentLayout, item);
             this.soundData = soundData;
         }
 
@@ -221,6 +208,14 @@ public class CreateCollectionActivity extends BaseActivity {
 
         public Button getPlayButton() {
             return playButton;
+        }
+
+        public LinearLayout getParentLayout() {
+            return parentLayout;
+        }
+
+        public View getItem() {
+            return item;
         }
 
         public EditText getEditText() {

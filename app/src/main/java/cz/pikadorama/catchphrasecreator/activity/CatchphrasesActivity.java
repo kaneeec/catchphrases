@@ -1,5 +1,6 @@
 package cz.pikadorama.catchphrasecreator.activity;
 
+import android.content.Context;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -8,12 +9,6 @@ import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.Toast;
-
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
-
-import java.util.List;
 
 import cz.pikadorama.catchphrasecreator.Const;
 import cz.pikadorama.catchphrasecreator.R;
@@ -33,22 +28,28 @@ public class CatchphrasesActivity extends BaseActivity {
 
         Collection collection = ActivityParams.load(Const.BundleParam.COLLECTION);
 
-        Toolbar toolbar = requireView(R.id.toolbar);
-        toolbar.setBackgroundColor(collection.getColor());
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        initToolbar(collection);
+        initStatusBar(collection);
+        initGridView(collection);
+    }
 
-        Window window = getWindow();
-        window.setStatusBarColor(collection.getColor());
-
+    private void initGridView(Collection collection) {
         GridView gridview = (GridView) findViewById(R.id.gridview);
         gridview.setAdapter(new CatchPhraseAdapter(this, collection.getCatchPhrases()));
-        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                CatchPhrase catchPhrase = (CatchPhrase) parent.getItemAtPosition(position);
-                SoundPlayer.getInstance(CatchphrasesActivity.this).play(catchPhrase.getSoundData());
-            }
-        });
+        gridview.setOnItemClickListener(new GridViewItemListener(this));
+    }
+
+    private void initStatusBar(Collection collection) {
+        Window window = getWindow();
+        window.setStatusBarColor(collection.getColor());
+    }
+
+    private void initToolbar(Collection collection) {
+        Toolbar toolbar = requireView(R.id.toolbar);
+        toolbar.setBackgroundColor(collection.getColor());
+        toolbar.setTitle(collection.getName());
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -60,5 +61,19 @@ public class CatchphrasesActivity extends BaseActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private static final class GridViewItemListener implements AdapterView.OnItemClickListener {
+
+        private final Context context;
+
+        public GridViewItemListener(Context context) {
+            this.context = context;
+        }
+
+        public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+            CatchPhrase catchPhrase = (CatchPhrase) parent.getItemAtPosition(position);
+            SoundPlayer.getInstance(context).play(catchPhrase.getSoundData());
+        }
     }
 }

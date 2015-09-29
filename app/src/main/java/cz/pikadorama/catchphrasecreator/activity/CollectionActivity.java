@@ -46,11 +46,11 @@ public class CollectionActivity extends BaseActivity implements EventProcessor {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_collections);
 
         initToolbar();
         initDrawer();
-        EventManager.unregisterEventProcessor(this, EventType.DATABASE_UPDATED);
+        EventManager.registerEventProcessor(this, EventType.DATABASE_UPDATED);
     }
 
     @Override
@@ -76,7 +76,8 @@ public class CollectionActivity extends BaseActivity implements EventProcessor {
                 startActivity(new Intent(this, CreateCollectionActivity.class));
                 break;
             case R.id.menu_load_collection:
-
+                startActivityForResult(FilePicker.getIntent(this), FilePicker.FILE_SELECT_CODE);
+                break;
         }
 
         return super.onOptionsItemSelected(item);
