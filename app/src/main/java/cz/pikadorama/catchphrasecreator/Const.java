@@ -15,7 +15,8 @@ public class Const {
         COLLECTION,
         COLLECTION_LIST,
         CATCHPHRASE,
-        CATCHPHRASE_LIST;
+        CATCHPHRASE_LIST,
+        MODE_EDIT;
 
     }
 

@@ -41,14 +41,17 @@ import cz.pikadorama.framework.util.Views;
 public class CollectionManagementActivity extends BaseActivity {
 
     private List<LineObjects> lines = new ArrayList<>();
+    boolean editModeOn = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_collection); // TODO rename layout
+        setContentView(R.layout.activity_manage_collection);
 
-        // TODO: create lines if editing
-        initCatchphrases();
+        editModeOn = ActivityParams.load(Const.BundleParam.MODE_EDIT);
+        if (editModeOn) {
+            initCatchphrases();
+        }
 
         initToolbar();
     }
@@ -128,26 +131,33 @@ public class CollectionManagementActivity extends BaseActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_cancel);
 
-        // TODO: set title - crate or edit
+        if (editModeOn) {
+            toolbar.setTitle("Upravit kolekci");
+        } else {
+            toolbar.setTitle("Nová kolekce");
+        }
     }
 
     private void saveCollection() {
         // TODO: create or update ...
+        if (editModeOn) {
 
-        Dao<CatchPhrase> catchPhraseDao = DaoManager.getDao(CatchPhrase.class);
-        List<CatchPhrase> catchPhrases = new ArrayList<>();
-        for (LineObjects line : lines) {
-            CatchPhrase catchPhrase = new CatchPhrase(line.getEditText().getText().toString(), line.getSoundData());
-            catchPhraseDao.create(catchPhrase);
-            catchPhrases.add(catchPhrase);
+        } else {
+            Dao<CatchPhrase> catchPhraseDao = DaoManager.getDao(CatchPhrase.class);
+            List<CatchPhrase> catchPhrases = new ArrayList<>();
+            for (LineObjects line : lines) {
+                CatchPhrase catchPhrase = new CatchPhrase(line.getEditText().getText().toString(), line.getSoundData());
+                catchPhraseDao.create(catchPhrase);
+                catchPhrases.add(catchPhrase);
+            }
+
+            EditText collectionEditText = requireView(R.id.input_collection_name);
+            Collection collection = new Collection(collectionEditText.getText().toString(), 0.0, getResources().getColor
+                    (R.color.primary), State.PERSONAL_PRIVATE, catchPhrases);
+
+            Dao<Collection> collectionDao = DaoManager.getDao(Collection.class);
+            collectionDao.create(collection);
         }
-
-        EditText collectionEditText = requireView(R.id.input_collection_name);
-        Collection collection = new Collection(collectionEditText.getText().toString(), 0.0, getResources().getColor
-                (R.color.primary), State.PERSONAL_PRIVATE, catchPhrases);
-
-        Dao<Collection> collectionDao = DaoManager.getDao(Collection.class);
-        collectionDao.create(collection);
 
         EventManager.notifyEventProcessors(EventType.DATABASE_UPDATED);
     }

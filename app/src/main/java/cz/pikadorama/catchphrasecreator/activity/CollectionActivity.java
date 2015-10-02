@@ -73,6 +73,7 @@ public class CollectionActivity extends BaseActivity implements EventProcessor {
                 drawer.openDrawer(GravityCompat.START);
                 break;
             case R.id.menu_add_collection:
+                ActivityParams.store(Const.BundleParam.MODE_EDIT, false);
                 startActivity(new Intent(this, CollectionManagementActivity.class));
                 break;
             case R.id.menu_load_collection:
@@ -165,7 +166,7 @@ public class CollectionActivity extends BaseActivity implements EventProcessor {
         }
 
         public boolean hasIdChanged() {
-            return previousId == currentId;
+            return previousId != currentId;
         }
     }
 

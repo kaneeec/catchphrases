@@ -1,5 +1,6 @@
 package cz.pikadorama.framework.event;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -31,7 +32,9 @@ public class EventManager {
 
         List<EventProcessor> processorsForType = processors.get(eventType);
         if (processorsForType == null) {
-            processors.put(eventType, Arrays.asList(eventProcessor));
+            List<EventProcessor> procAsList = new ArrayList<>();
+            procAsList.add(eventProcessor);
+            processors.put(eventType, procAsList);
         } else {
             if (processorsForType.contains(eventProcessor)) {
                 throw new IllegalStateException("Event processor " + eventProcessor + " is already registered.");
