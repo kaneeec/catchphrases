@@ -1,9 +1,7 @@
 package cz.pikadorama.catchphrasecreator.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -33,22 +31,57 @@ import cz.pikadorama.framework.database.DaoManager;
 import cz.pikadorama.framework.database.dao.Dao;
 import cz.pikadorama.framework.event.EventManager;
 import cz.pikadorama.framework.event.EventType;
+import cz.pikadorama.framework.util.ActivityParams;
 import cz.pikadorama.framework.util.FilePicker;
 import cz.pikadorama.framework.util.Views;
 
 /**
  * Created by Tomas on 26.9.2015.
  */
-public class CreateCollectionActivity extends BaseActivity {
+public class CollectionManagementActivity extends BaseActivity {
 
     private List<LineObjects> lines = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_collection);
+        setContentView(R.layout.activity_create_collection); // TODO rename layout
+
+        // TODO: create lines if editing
+        initCatchphrases();
 
         initToolbar();
+    }
+
+    private void initCatchphrases() {
+        Collection collectionToEdit = ActivityParams.load(Const.BundleParam.COLLECTION);
+
+        EditText collectionEditText = requireView(R.id.input_collection_name);
+        collectionEditText.setText(collectionToEdit.getName());
+
+        for (CatchPhrase catchPhrase : collectionToEdit.getCatchPhrases()) {
+            // initialize items and add them to the layout
+            LinearLayout layout = requireView(R.id.layout);
+            View item = LayoutInflater.from(CollectionManagementActivity.this).inflate(R.layout
+                            .item_manage_collection_item,
+                    null);
+
+            EditText editText = Views.require(item, R.id.text);
+            editText.setText(catchPhrase.getText());
+
+            Button playButton = Views.require(item, R.id.play_sound_button);
+            playButton.setOnClickListener(new PlayCatchPhraseButtonListener(CollectionManagementActivity.this, catchPhrase.getSoundData()));
+
+            LineObjects line = new LineObjects(editText, playButton, layout, item, catchPhrase.getSoundData()); // TODO: why sound data twice ?
+            lines.add(line);
+
+            layout.addView(item);
+
+            // prepare remove button
+            Button removeButton = Views.require(item, R.id.remove_item_button);
+            removeButton.setOnClickListener(new RemoveCatchPhraseButtonListener(line, lines));
+        }
+
     }
 
     @Override
@@ -94,9 +127,13 @@ public class CreateCollectionActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_cancel);
+
+        // TODO: set title - crate or edit
     }
 
     private void saveCollection() {
+        // TODO: create or update ...
+
         Dao<CatchPhrase> catchPhraseDao = DaoManager.getDao(CatchPhrase.class);
         List<CatchPhrase> catchPhrases = new ArrayList<>();
         for (LineObjects line : lines) {
@@ -118,13 +155,13 @@ public class CreateCollectionActivity extends BaseActivity {
     private void loadSoundFromFile(Intent intent) {
         try {
             // load data
-            String filePath = FilePicker.resolvePath(CreateCollectionActivity.this, intent.getData());
+            String filePath = FilePicker.resolvePath(CollectionManagementActivity.this, intent.getData());
             File file = new File(filePath);
             byte[] soundData = Files.toByteArray(file);
 
             // initialize item and add it to the layout
             LinearLayout layout = requireView(R.id.layout);
-            View item = LayoutInflater.from(CreateCollectionActivity.this).inflate(R.layout
+            View item = LayoutInflater.from(CollectionManagementActivity.this).inflate(R.layout
                             .item_manage_collection_item,
                     null);
 
@@ -132,7 +169,7 @@ public class CreateCollectionActivity extends BaseActivity {
             editText.setText(file.getName());
 
             Button playButton = Views.require(item, R.id.play_sound_button);
-            playButton.setOnClickListener(new PlayCatchPhraseButtonListener(CreateCollectionActivity.this, soundData));
+            playButton.setOnClickListener(new PlayCatchPhraseButtonListener(CollectionManagementActivity.this, soundData));
 
             LineObjects line = new LineObjects(editText, playButton, layout, item, soundData);
             lines.add(line);

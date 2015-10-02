@@ -73,7 +73,7 @@ public class CollectionActivity extends BaseActivity implements EventProcessor {
                 drawer.openDrawer(GravityCompat.START);
                 break;
             case R.id.menu_add_collection:
-                startActivity(new Intent(this, CreateCollectionActivity.class));
+                startActivity(new Intent(this, CollectionManagementActivity.class));
                 break;
             case R.id.menu_load_collection:
                 startActivityForResult(FilePicker.getIntent(this), FilePicker.FILE_SELECT_CODE);
