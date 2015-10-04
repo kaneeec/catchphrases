@@ -14,6 +14,9 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 
 import java.io.File;
@@ -43,6 +46,8 @@ public class CollectionManagementActivity extends BaseActivity {
     private List<LineObjects> lines = new ArrayList<>();
     boolean editModeOn = false;
 
+    private Collection collectionToEdit;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,31 +62,30 @@ public class CollectionManagementActivity extends BaseActivity {
     }
 
     private void initCatchphrases() {
-        Collection collectionToEdit = ActivityParams.load(Const.BundleParam.COLLECTION);
+        collectionToEdit = ActivityParams.load(Const.BundleParam.COLLECTION);
 
         EditText collectionEditText = requireView(R.id.input_collection_name);
         collectionEditText.setText(collectionToEdit.getName());
 
         for (CatchPhrase catchPhrase : collectionToEdit.getCatchPhrases()) {
-            // initialize items and add them to the layout
-            LinearLayout layout = requireView(R.id.layout);
-            View item = LayoutInflater.from(CollectionManagementActivity.this).inflate(R.layout
+            LinearLayout parentLayout = requireView(R.id.layout);
+            View lineItem = LayoutInflater.from(CollectionManagementActivity.this).inflate(R.layout
                             .item_manage_collection_item,
                     null);
 
-            EditText editText = Views.require(item, R.id.text);
+            EditText editText = Views.require(lineItem, R.id.text);
             editText.setText(catchPhrase.getText());
 
-            Button playButton = Views.require(item, R.id.play_sound_button);
+            Button playButton = Views.require(lineItem, R.id.play_sound_button);
             playButton.setOnClickListener(new PlayCatchPhraseButtonListener(CollectionManagementActivity.this, catchPhrase.getSoundData()));
 
-            LineObjects line = new LineObjects(editText, playButton, layout, item, catchPhrase.getSoundData()); // TODO: why sound data twice ?
+            LineObjects line = new LineObjects(editText, playButton, parentLayout, lineItem, catchPhrase);
             lines.add(line);
 
-            layout.addView(item);
+            parentLayout.addView(lineItem);
 
             // prepare remove button
-            Button removeButton = Views.require(item, R.id.remove_item_button);
+            Button removeButton = Views.require(lineItem, R.id.remove_item_button);
             removeButton.setOnClickListener(new RemoveCatchPhraseButtonListener(line, lines));
         }
 
@@ -139,9 +143,41 @@ public class CollectionManagementActivity extends BaseActivity {
     }
 
     private void saveCollection() {
-        // TODO: create or update ...
         if (editModeOn) {
+            List<CatchPhrase> toRemove = new ArrayList<>(collectionToEdit.getCatchPhrases());
+            toRemove.removeAll(Lists.transform(lines, new Function<LineObjects, CatchPhrase>() {
+                @Override
+                public CatchPhrase apply(LineObjects line) {
+                    return line.getCatchPhrase();
+                }
+            }));
 
+            List<CatchPhrase> toUpdate = new ArrayList<>(collectionToEdit.getCatchPhrases());
+            toUpdate.removeAll(toRemove);
+
+            List<CatchPhrase> toCreate = new ArrayList<>(Lists.transform(lines, new Function<LineObjects, CatchPhrase>() {
+                @Override
+                public CatchPhrase apply(LineObjects input) {
+                    return input.getCatchPhrase();
+                }
+            }));
+            toCreate.removeAll(collectionToEdit.getCatchPhrases());
+
+            Dao<CatchPhrase> catchPhraseDao = DaoManager.getDao(CatchPhrase.class);
+            for (CatchPhrase catchPhrase : toRemove) {
+                catchPhraseDao.delete(catchPhrase);
+            }
+            for (CatchPhrase catchPhrase : toCreate) {
+                catchPhraseDao.create(catchPhrase);
+            }
+            for (CatchPhrase catchPhrase : toUpdate) {
+                catchPhraseDao.update(catchPhrase);
+            }
+
+            collectionToEdit.setCatchPhrases(Lists.newArrayList(Iterables.concat(toCreate, toUpdate)));
+
+            Dao<Collection> collectionDao = DaoManager.getDao(Collection.class);
+            collectionDao.update(collectionToEdit);
         } else {
             Dao<CatchPhrase> catchPhraseDao = DaoManager.getDao(CatchPhrase.class);
             List<CatchPhrase> catchPhrases = new ArrayList<>();
@@ -235,18 +271,28 @@ public class CollectionManagementActivity extends BaseActivity {
         private final EditText editText;
         private final Button playButton;
 
+        private CatchPhrase catchPhrase;
         private byte[] soundData;
 
-        public LineObjects(EditText editText, Button playButton, LinearLayout parentLayout, View item) {
+        public LineObjects(EditText editText, Button playButton, LinearLayout parentLayout, View item, byte[]
+                soundData) {
             this.editText = editText;
             this.playButton = playButton;
             this.parentLayout = parentLayout;
             this.item = item;
+            this.soundData = soundData;
         }
 
-        public LineObjects(EditText editText, Button playButton, LinearLayout parentLayout, View item, byte[] soundData) {
-            this(editText, playButton, parentLayout, item);
-            this.soundData = soundData;
+        public LineObjects(EditText editText, Button playButton, LinearLayout parentLayout, View item, CatchPhrase catchPhrase) {
+            this.editText = editText;
+            this.playButton = playButton;
+            this.parentLayout = parentLayout;
+            this.item = item;
+            this.catchPhrase = catchPhrase;
+        }
+
+        public CatchPhrase getCatchPhrase() {
+            return catchPhrase;
         }
 
         public byte[] getSoundData() {
